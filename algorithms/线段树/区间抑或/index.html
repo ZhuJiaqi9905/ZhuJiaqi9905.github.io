@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>HomePage :: My New Hugo Site</title>
+    <title>ZGOJ1561 区间抑或 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1580636362" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/">
+  <body class="" data-url="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/">
     <nav id="sidebar" class="">
 
 
@@ -73,7 +73,7 @@
   
     
     <li data-nav-id="/algorithms/" title="算法" class="dd-item 
-        
+        parent
         
         
         ">
@@ -100,7 +100,7 @@
   
     
     <li data-nav-id="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="线段树" class="dd-item 
-        
+        parent
         
         
         ">
@@ -127,8 +127,8 @@
   
     
     <li data-nav-id="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/" title="ZGOJ1561 区间抑或" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/">
@@ -228,30 +228,245 @@
         <div id="overlay"></div>
         <div class="padding highlightable">
               
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/algorithms/'>算法</a> > <a href='/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/'>线段树</a> > ZGOJ1561 区间抑或
+          
+         
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
         <div id="head-tags">
         
         </div>
         
         <div id="body-inner">
           
+            <h1>
+              
+              ZGOJ1561 区间抑或
+            </h1>
+          
 
         
 
 
-<span id="sidebar-toggle-span">
-<a href="#" id="sidebar-toggle" data-sidebar-toggle=""><i class="fas fa-bars"></i> navigation</a>
-</span>
 
- 
-<h2 id="欢迎来到zjq的博客">欢迎来到ZJQ的博客</h2>
+
+	<h2 id="题目链接">题目链接</h2>
+<p>打不开了</p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-<li>本博客是基于<a href="https://gohugo.io/">hugo</a>框架搭建的静态博客。本人第一次搭博客，动态博客也写不来，而且也设计不出这些主题。</li>
-<li>博客内容以学习为主，经初步构思，本博客主要用来记录算法、计算机知识、电脑使用知识等。</li>
-<li>佛系更新，更新快说明在认真学习ing，更新慢说明在摸鱼&hellip;&hellip;</li>
-<li>祝大家开心快乐，学习进步！</li>
+<li>忘了</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>利用线段树，区间操作注意用延迟更新，包括向下更新和向上更新。</li>
+<li>注意要用unsigned int。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdlib&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;queue&gt;
+#include&lt;string&gt;
+#include&lt;stack&gt;
+#include&lt;cmath&gt;
+using namespace std;
+int a[100010];
+unsigned int b;
+int n;//n个数 
+int m;//m个查询 
+struct Node {
+	int L, R;
+	int sum;//区间的抑或和 
+	int lazy;
+	int val;
+	int Mid() {
+		return (L + R) / 2;
+	}
+};
+Node tree[400010];
+void build_tree(int root, int l, int r)
+{
+	tree[root].L = l; tree[root].R = r; tree[root].lazy = 0; tree[root].val = 0;
+	if (l == r) {
+		tree[root].sum = a[l]; tree[root].val = a[l];
+		return;
+	}
+	int lc = (root &lt;&lt; 1);
+	int rc = (root &lt;&lt; 1) | 1;
+	int mid = tree[root].Mid();
+	build_tree(lc, l, mid);
+	build_tree(rc, mid + 1, r);
+	tree[root].sum = tree[lc].sum ^ tree[rc].sum;
+}
+int query_tree(int root, int l, int r)
+{
+	if (tree[root].L &lt;= l &amp;&amp; tree[root].R &gt;= r &amp;&amp; tree[root].lazy) {
+		if ((r - l +1) % 2) {
+			return tree[root].val;
+		}
+		else {
+			return 0;
+		}
+	}
+	if (tree[root].L == l &amp;&amp; tree[root].R == r) {
+		return tree[root].sum;
+	}
+	int lc = (root &lt;&lt; 1);
+	int rc = (root &lt;&lt; 1) | 1;
+	int mid = tree[root].Mid();
+	if (r &lt;= mid) {
+		return query_tree(lc, l, r);
+	}
+	else if (l &gt; mid) {
+		return query_tree(rc, l, r);
+	}
+	else {
+		return (query_tree(lc, l, mid) ^ query_tree(rc, mid + 1, r));
+	}
+}
+void change_tree(int root, int l, int r, int num)
+{
+	if (tree[root].L == l &amp;&amp; tree[root].R == r) {
+		tree[root].val = num; tree[root].lazy = 1;
+		if ((r - l +1 ) % 2) {
+			tree[root].sum = num;
+		}
+		else
+			tree[root].sum = 0;
+		return;
+	}
+	int lc = (root &lt;&lt; 1);
+	int rc = (root &lt;&lt; 1) | 1;
+	int mid = tree[root].Mid();
+	if (tree[root].lazy) {
+		tree[root].lazy = 0; tree[lc].lazy = tree[rc].lazy = 1;
+		tree[lc].val = tree[rc].val = tree[root].val;
+		if ((tree[lc].R - tree[lc].L + 1) % 2) {
+			tree[lc].sum = tree[lc].val;
+		}
+		else
+			tree[lc].sum = 0;
+		if ((tree[rc].R - tree[rc].L + 1) % 2) {
+			tree[rc].sum = tree[rc].val;
+		}
+		else
+			tree[rc].sum = 0;
+	}
+	if (r &lt;= mid) {
+		change_tree(lc, l, r, num);
+	}
+	else if (l &gt; mid) {
+		change_tree(rc, l, r, num);
+	}
+	else {
+		change_tree(lc, l, mid, num);
+		change_tree(rc, mid + 1, r, num);
+	}
+	tree[root].sum = tree[lc].sum ^ tree[rc].sum; //tree[root].lazy = 0;
+	return;
+}
+int main()
+{
+	int T;
+	scanf(&quot;%d&quot;, &amp;T);
+	int i, j; unsigned int ans;//注意要用unsigned int !!! 
+	while (T--) {
+		scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
+		memset(tree, 0, sizeof(tree));
+		memset(a, 0, sizeof(a));
+
+		for (i = 1; i &lt;= n; ++i) {
+			scanf(&quot;%u&quot;, &amp;b);
+			a[i] = (int)b;
+		}
+		
+		build_tree(1, 1, n);
+		char s[3]; int a, b, x;
+		for (i = 1; i &lt;= m; ++i) {
+			scanf(&quot;%s&quot;, s);
+			if (s[0] == 'C') {
+				scanf(&quot;%d%d%d&quot;, &amp;a, &amp;b, &amp;x);
+				change_tree(1, a, b, x);
+			}
+			else {
+				scanf(&quot;%d%d&quot;, &amp;a, &amp;b);
+				ans = query_tree(1, a, b);
+				printf(&quot;%u\n&quot;, ans);
+			}
+		}
+		printf(&quot;\n&quot;);
+	}
+	return 0;
+}
+
+</code></pre>
+
+
+
+
+<footer class=" footline" >
 	
-  
+</footer>
+
         
         </div> 
         
@@ -283,8 +498,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -301,6 +514,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -315,6 +529,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -331,6 +546,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -374,8 +592,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="线段树"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/algorithms/" title="算法" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/" title="POJ2528 Mayor&#39;s poster" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -405,4 +625,3 @@
 
   </body>
 </html>
-

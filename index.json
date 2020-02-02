@@ -1,0 +1,57 @@
+[
+{
+	"uri": "https://zhujiaqi9905.github.io/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/",
+	"title": "ZGOJ1561 区间抑或",
+	"tags": [],
+	"description": "",
+	"content": "题目链接 打不开了\n题目描述  忘了  解题思路  利用线段树，区间操作注意用延迟更新，包括向下更新和向上更新。 注意要用unsigned int。  代码 #include\u0026lt;iostream\u0026gt; #include\u0026lt;cstdio\u0026gt; #include\u0026lt;cstring\u0026gt; #include\u0026lt;cstdlib\u0026gt; #include\u0026lt;algorithm\u0026gt; #include\u0026lt;vector\u0026gt; #include\u0026lt;queue\u0026gt; #include\u0026lt;string\u0026gt; #include\u0026lt;stack\u0026gt; #include\u0026lt;cmath\u0026gt; using namespace std; int a[100010]; unsigned int b; int n;//n个数 int m;//m个查询 struct Node { int L, R; int sum;//区间的抑或和 int lazy; int val; int Mid() { return (L + R) / 2; } }; Node tree[400010]; void build_tree(int root, int l, int r) { tree[root].L = l; tree[root].R = r; tree[root].lazy = 0; tree[root].val = 0; if (l == r) { tree[root].sum = a[l]; tree[root].val = a[l]; return; } int lc = (root \u0026lt;\u0026lt; 1); int rc = (root \u0026lt;\u0026lt; 1) | 1; int mid = tree[root].Mid(); build_tree(lc, l, mid); build_tree(rc, mid + 1, r); tree[root].sum = tree[lc].sum ^ tree[rc].sum; } int query_tree(int root, int l, int r) { if (tree[root].L \u0026lt;= l \u0026amp;\u0026amp; tree[root].R \u0026gt;= r \u0026amp;\u0026amp; tree[root].lazy) { if ((r - l +1) % 2) { return tree[root].val; } else { return 0; } } if (tree[root].L == l \u0026amp;\u0026amp; tree[root].R == r) { return tree[root].sum; } int lc = (root \u0026lt;\u0026lt; 1); int rc = (root \u0026lt;\u0026lt; 1) | 1; int mid = tree[root].Mid(); if (r \u0026lt;= mid) { return query_tree(lc, l, r); } else if (l \u0026gt; mid) { return query_tree(rc, l, r); } else { return (query_tree(lc, l, mid) ^ query_tree(rc, mid + 1, r)); } } void change_tree(int root, int l, int r, int num) { if (tree[root].L == l \u0026amp;\u0026amp; tree[root].R == r) { tree[root].val = num; tree[root].lazy = 1; if ((r - l +1 ) % 2) { tree[root].sum = num; } else tree[root].sum = 0; return; } int lc = (root \u0026lt;\u0026lt; 1); int rc = (root \u0026lt;\u0026lt; 1) | 1; int mid = tree[root].Mid(); if (tree[root].lazy) { tree[root].lazy = 0; tree[lc].lazy = tree[rc].lazy = 1; tree[lc].val = tree[rc].val = tree[root].val; if ((tree[lc].R - tree[lc].L + 1) % 2) { tree[lc].sum = tree[lc].val; } else tree[lc].sum = 0; if ((tree[rc].R - tree[rc].L + 1) % 2) { tree[rc].sum = tree[rc].val; } else tree[rc].sum = 0; } if (r \u0026lt;= mid) { change_tree(lc, l, r, num); } else if (l \u0026gt; mid) { change_tree(rc, l, r, num); } else { change_tree(lc, l, mid, num); change_tree(rc, mid + 1, r, num); } tree[root].sum = tree[lc].sum ^ tree[rc].sum; //tree[root].lazy = 0; return; } int main() { int T; scanf(\u0026quot;%d\u0026quot;, \u0026amp;T); int i, j; unsigned int ans;//注意要用unsigned int !!! while (T--) { scanf(\u0026quot;%d%d\u0026quot;, \u0026amp;n, \u0026amp;m); memset(tree, 0, sizeof(tree)); memset(a, 0, sizeof(a)); for (i = 1; i \u0026lt;= n; ++i) { scanf(\u0026quot;%u\u0026quot;, \u0026amp;b); a[i] = (int)b; } build_tree(1, 1, n); char s[3]; int a, b, x; for (i = 1; i \u0026lt;= m; ++i) { scanf(\u0026quot;%s\u0026quot;, s); if (s[0] == 'C') { scanf(\u0026quot;%d%d%d\u0026quot;, \u0026amp;a, \u0026amp;b, \u0026amp;x); change_tree(1, a, b, x); } else { scanf(\u0026quot;%d%d\u0026quot;, \u0026amp;a, \u0026amp;b); ans = query_tree(1, a, b); printf(\u0026quot;%u\\n\u0026quot;, ans); } } printf(\u0026quot;\\n\u0026quot;); } return 0; } "
+},
+{
+	"uri": "https://zhujiaqi9905.github.io/",
+	"title": "HomePage",
+	"tags": [],
+	"description": "",
+	"content": "欢迎来到ZJQ的博客  本博客是基于hugo框架搭建的静态博客。本人第一次搭博客，动态博客也写不来，而且也设计不出这些主题。 博客内容以学习为主，经初步构思，本博客主要用来记录算法、计算机知识、电脑使用知识等。 佛系更新，更新快说明在认真学习ing，更新慢说明在摸鱼\u0026hellip;\u0026hellip; 祝大家开心快乐，学习进步！  "
+},
+{
+	"uri": "https://zhujiaqi9905.github.io/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/",
+	"title": "POJ2528 Mayor&#39;s poster",
+	"tags": [],
+	"description": "",
+	"content": "题目链接 POJ2528 Mayor\u0026rsquo;s poster\n题目描述  用多张海报贴一面墙，求贴完后有几张海报是可见的（完全可见+部分可见）。 题目有多组数据。 对于每组数据有n个海报，每个海报给定左、右端点，并按照贴的顺序给出。  解题思路  利用线段树，注意处理顺序是由外层到内层。因为外层覆盖的区间会影响内层的可见情况，而内层覆盖的区间不会影响外层的可见情况。 注意延迟更新  代码 #include\u0026lt;iostream\u0026gt; #include\u0026lt;cstdio\u0026gt; #include\u0026lt;cstring\u0026gt; #include\u0026lt;cstdlib\u0026gt; #include\u0026lt;algorithm\u0026gt; #include\u0026lt;vector\u0026gt; #include\u0026lt;queue\u0026gt; #include\u0026lt;string\u0026gt; #include\u0026lt;stack\u0026gt; #include\u0026lt;cmath\u0026gt; using namespace std; struct Node { int L, R; bool covered; int Mid() { return L + (R - L) / 2; } }; struct Line { int s, e; }; Line poster[10010];//记录海报 int disc[40010];//用于离散化 Node tree[160010];//线段树 int point[40010];//记录海报的两个端点，用于离散化 int point_num;//记录去重后的端点个数 void build_tree(int root, int l, int r); bool query_tree(int root, int l, int r); int main() { int c; int n;//c个样例，n个海报 scanf(\u0026quot;%d\u0026quot;, \u0026amp;c); int ans; int i, j; while (c--) { ans = 0; scanf(\u0026quot;%d\u0026quot;, \u0026amp;n); for (i = 0; i \u0026lt; n; ++i) { scanf(\u0026quot;%d%d\u0026quot;, \u0026amp;poster[i].s, \u0026amp;poster[i].e); point[2 * i] = poster[i].s; point[2 * i + 1] = poster[i].e; } sort(point, point + 2 * n); point_num = unique(point, point + 2 * n) - point; int dcnt = 0; disc[dcnt] = point[0]; dcnt++; //离散化，要把两个端点中间的区间也离散化成一个区间， //因此如果(point[i]-point[i-1]\u0026gt;1)，就把point[i-1]+1当一个新区间 for(i = 1; i \u0026lt; point_num; ++i){ if( (point[i] - point[i-1]) \u0026gt; 1){ disc[dcnt] = point[i-1]+1;\tdcnt++; } disc[dcnt] = point[i]; dcnt++; } build_tree(1, 1, dcnt); int nl, nr; for(i = n - 1; i \u0026gt;= 0; --i){ nl = lower_bound(disc, disc + dcnt, poster[i].s) - disc + 1; nr = lower_bound(disc, disc + dcnt, poster[i].e) - disc + 1; if(!query_tree(1, nl, nr) ){ ans++; } } printf(\u0026quot;%d\\n\u0026quot;, ans); } } void build_tree(int root, int l, int r) { tree[root].L = l; tree[root].R = r; tree[root].covered = 0; if (l == r) return; int mid = tree[root].Mid(); build_tree((root \u0026lt;\u0026lt; 1), l, mid); build_tree((root \u0026lt;\u0026lt; 1) | 1, mid + 1, r); return; } bool query_tree(int root, int l, int r) { bool flag = 0; if (tree[root].L == l \u0026amp;\u0026amp; tree[root].R == r) { flag = tree[root].covered; tree[root].covered = 1; return flag; } if(tree[root].L \u0026lt;= l \u0026amp;\u0026amp; tree[root].R \u0026gt;= r \u0026amp;\u0026amp; tree[root].covered){ //如果当前区间包裹了要查询的区间，且已经被覆盖了，就直接返回true, //因为你第一个是延迟更新，你这里不判断，就跑到下面了 //注意这里，错了两次了！！！ return 1; } int mid = tree[root].Mid(); int lc = (root \u0026lt;\u0026lt; 1); int rc = (root \u0026lt;\u0026lt; 1) | 1; if (r \u0026lt;= mid) { flag = query_tree(lc, l, r); } else if (l \u0026gt; mid) { flag = query_tree(rc, l, r); } else { flag = query_tree(lc, l, mid) \u0026amp; query_tree(rc, mid + 1, r); } //注意更新cover的状态 tree[root].covered = tree[lc].covered \u0026amp; tree[rc].covered; return flag; } "
+},
+{
+	"uri": "https://zhujiaqi9905.github.io/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/",
+	"title": "线段树",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://zhujiaqi9905.github.io/algorithms/",
+	"title": "算法",
+	"tags": [],
+	"description": "",
+	"content": "简介  本栏目期望能够长期更新，用于记录算法和数据结构。 主要内容是做过的题和代码。 由于本人从大学才开始接触算法，并且在学校被虐的死去活来QAQS，因此题目多为模板题。  "
+},
+{
+	"uri": "https://zhujiaqi9905.github.io/machine_learning/",
+	"title": "机器学习",
+	"tags": [],
+	"description": "",
+	"content": "简介  以记录机器学习的代码实现为主 更新时间未知，因为偶还没开始学\u0026hellip;\u0026hellip;  "
+},
+{
+	"uri": "https://zhujiaqi9905.github.io/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://zhujiaqi9905.github.io/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]

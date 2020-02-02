@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>HomePage :: My New Hugo Site</title>
+    <title>POJ2528 Mayor&#39;s poster :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1580636362" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/">
+  <body class="" data-url="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/">
     <nav id="sidebar" class="">
 
 
@@ -73,7 +73,7 @@
   
     
     <li data-nav-id="/algorithms/" title="算法" class="dd-item 
-        
+        parent
         
         
         ">
@@ -100,7 +100,7 @@
   
     
     <li data-nav-id="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="线段树" class="dd-item 
-        
+        parent
         
         
         ">
@@ -151,8 +151,8 @@
   
     
     <li data-nav-id="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/" title="POJ2528 Mayor&#39;s poster" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/">
@@ -228,30 +228,221 @@
         <div id="overlay"></div>
         <div class="padding highlightable">
               
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/algorithms/'>算法</a> > <a href='/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/'>线段树</a> > POJ2528 Mayor's poster
+          
+         
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
         <div id="head-tags">
         
         </div>
         
         <div id="body-inner">
           
+            <h1>
+              
+              POJ2528 Mayor&#39;s poster
+            </h1>
+          
 
         
 
 
-<span id="sidebar-toggle-span">
-<a href="#" id="sidebar-toggle" data-sidebar-toggle=""><i class="fas fa-bars"></i> navigation</a>
-</span>
 
- 
-<h2 id="欢迎来到zjq的博客">欢迎来到ZJQ的博客</h2>
+
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="http://poj.org/problem?id=2528">POJ2528 Mayor&rsquo;s poster</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-<li>本博客是基于<a href="https://gohugo.io/">hugo</a>框架搭建的静态博客。本人第一次搭博客，动态博客也写不来，而且也设计不出这些主题。</li>
-<li>博客内容以学习为主，经初步构思，本博客主要用来记录算法、计算机知识、电脑使用知识等。</li>
-<li>佛系更新，更新快说明在认真学习ing，更新慢说明在摸鱼&hellip;&hellip;</li>
-<li>祝大家开心快乐，学习进步！</li>
+<li>用多张海报贴一面墙，求贴完后有几张海报是可见的（完全可见+部分可见）。</li>
+<li>题目有多组数据。</li>
+<li>对于每组数据有n个海报，每个海报给定左、右端点，并按照贴的顺序给出。</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>利用线段树，注意处理顺序是由外层到内层。因为外层覆盖的区间会影响内层的可见情况，而内层覆盖的区间不会影响外层的可见情况。</li>
+<li>注意延迟更新</li>
+</ul>
+<h2 id="代码">代码</h2>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdlib&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;queue&gt;
+#include&lt;string&gt;
+#include&lt;stack&gt;
+#include&lt;cmath&gt;
+using namespace std;
+struct Node {
+	int L, R;
+	bool covered;
+	int Mid()
+	{
+		return L + (R - L) / 2;
+	}
+};
+struct Line {
+	int s, e;
+};
+
+Line poster[10010];//记录海报
+int disc[40010];//用于离散化
+Node tree[160010];//线段树
+int point[40010];//记录海报的两个端点，用于离散化
+int point_num;//记录去重后的端点个数
+void build_tree(int root, int l, int r);
+bool query_tree(int root, int l, int r);
+int main()
+{
+	int c; int n;//c个样例，n个海报
+	scanf(&quot;%d&quot;, &amp;c);
+	int ans; int i, j;
+	while (c--) {
+		ans = 0;
+		scanf(&quot;%d&quot;, &amp;n);
+		for (i = 0; i &lt; n; ++i) {
+			scanf(&quot;%d%d&quot;, &amp;poster[i].s, &amp;poster[i].e);
+			point[2 * i] = poster[i].s;
+			point[2 * i + 1] = poster[i].e;
+		}
+		sort(point, point + 2 * n);
+		point_num = unique(point, point + 2 * n) - point;
+		int dcnt = 0;
+		disc[dcnt] = point[0]; dcnt++;
+		//离散化，要把两个端点中间的区间也离散化成一个区间，
+		//因此如果(point[i]-point[i-1]&gt;1)，就把point[i-1]+1当一个新区间 
+		for(i = 1; i &lt; point_num; ++i){
+			if( (point[i] - point[i-1]) &gt; 1){
+			disc[dcnt] = point[i-1]+1;	dcnt++; 
+			}
+			 disc[dcnt] = point[i]; dcnt++;
+		}
+		
+		build_tree(1, 1, dcnt);
+		int nl, nr;
+		
+		for(i = n - 1; i &gt;= 0; --i){
+			nl = lower_bound(disc, disc + dcnt, poster[i].s) - disc + 1;
+			nr = lower_bound(disc, disc + dcnt, poster[i].e) - disc + 1;
+			
+			if(!query_tree(1, nl, nr) ){
+				ans++;
+			}
+				
+		} 
+		printf(&quot;%d\n&quot;, ans);
+	}
+}
+
+
+void build_tree(int root, int l, int r)
+{
+	tree[root].L = l; tree[root].R = r;
+	tree[root].covered = 0;
+	if (l == r)
+		return;
+	int mid = tree[root].Mid();
+	build_tree((root &lt;&lt; 1), l, mid);
+	build_tree((root &lt;&lt; 1) | 1, mid + 1, r);
+	return;
+}
+bool query_tree(int root, int l, int r)
+{
+	bool flag = 0;
+	if (tree[root].L == l &amp;&amp; tree[root].R == r) {
+		flag = tree[root].covered;
+		tree[root].covered = 1;
+		return flag;
+	}
+	if(tree[root].L &lt;= l &amp;&amp; tree[root].R &gt;= r &amp;&amp; tree[root].covered){
+		//如果当前区间包裹了要查询的区间，且已经被覆盖了，就直接返回true,
+		//因为你第一个是延迟更新，你这里不判断，就跑到下面了 
+		//注意这里，错了两次了！！！ 
+		return 1;
+	}
+	int mid = tree[root].Mid();
+	int lc = (root &lt;&lt; 1);
+	int rc = (root &lt;&lt; 1) | 1;
+	if (r &lt;= mid) {
+		flag = query_tree(lc, l, r);
+	}
+	else if (l &gt; mid) {
+		flag = query_tree(rc, l, r);
+	}
+	else {
+		flag = query_tree(lc, l, mid) &amp; query_tree(rc, mid + 1, r);
+	}
+	//注意更新cover的状态
+	tree[root].covered = tree[lc].covered &amp; tree[rc].covered;
+	return flag;
+}
+</code></pre>
+
+
+
+
+<footer class=" footline" >
 	
-  
+</footer>
+
         
         </div> 
         
@@ -283,8 +474,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -301,6 +490,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -316,21 +506,8 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
+                        
                     
                 
                 
@@ -343,6 +520,23 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -353,6 +547,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -374,8 +571,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/" title="ZGOJ1561 区间抑或"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/algorithms/" title="算法" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/machine_learning/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -405,4 +604,3 @@
 
   </body>
 </html>
-
