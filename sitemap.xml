@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/</loc>
+    <lastmod>2020-02-02T08:20:47+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/algorithm/</loc>
+    <lastmod>2020-02-02T08:20:47+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/algorithm/segment_tree/poj2528mayors_poster/</loc>
+    <lastmod>2020-02-02T08:20:47+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/tags/</loc>
+  </url>
+  
+</urlset>
