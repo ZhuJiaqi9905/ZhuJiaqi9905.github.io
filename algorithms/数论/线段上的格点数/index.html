@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>HomePage :: My New Hugo Site</title>
+    <title>线段上的格点数 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1580734051" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/">
+  <body class="" data-url="/algorithms/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/">
     <nav id="sidebar" class="">
 
 
@@ -73,7 +73,7 @@
   
     
     <li data-nav-id="/algorithms/" title="算法" class="dd-item 
-        
+        parent
         
         
         ">
@@ -100,7 +100,7 @@
   
     
     <li data-nav-id="/algorithms/%E6%95%B0%E8%AE%BA/" title="数论" class="dd-item 
-        
+        parent
         
         
         ">
@@ -247,8 +247,8 @@
   
     
     <li data-nav-id="/algorithms/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/" title="线段上的格点数" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/algorithms/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/">
@@ -408,30 +408,137 @@
         <div id="overlay"></div>
         <div class="padding highlightable">
               
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/algorithms/'>算法</a> > <a href='/algorithms/%E6%95%B0%E8%AE%BA/'>数论</a> > 线段上的格点数
+          
+         
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
         <div id="head-tags">
         
         </div>
         
         <div id="body-inner">
           
+            <h1>
+              
+              线段上的格点数
+            </h1>
+          
 
         
 
 
-<span id="sidebar-toggle-span">
-<a href="#" id="sidebar-toggle" data-sidebar-toggle=""><i class="fas fa-bars"></i> navigation</a>
-</span>
 
- 
-<h2 id="欢迎来到zjq的博客">欢迎来到ZJQ的博客</h2>
+
+	<h2 id="题目描述">题目描述</h2>
+<p>给定平面上的两个格点P和Q的坐标。求线段PQ除端点以外一共有多少个格点？</p>
+<h2 id="解题思路">解题思路</h2>
 <ul>
-<li>本博客是基于<a href="https://gohugo.io/">hugo</a>框架搭建的静态博客。本人第一次搭博客，动态博客也写不来，而且也设计不出这些主题。</li>
-<li>博客内容以学习为主，经初步构思，本博客主要用来记录算法、计算机知识、电脑使用知识等。</li>
-<li>佛系更新，更新快说明在认真学习ing，更新慢说明在摸鱼&hellip;&hellip;</li>
-<li>祝大家开心快乐，学习进步！</li>
+<li>答案是线段x轴投影长度与y轴投影长度的最大公约数-1</li>
+<li>注意特判P与Q重合的情况</li>
 </ul>
+<h2 id="代码">代码</h2>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdlib&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;queue&gt;
+#include&lt;string&gt;
+#include&lt;stack&gt;
+#include&lt;cmath&gt;
+using namespace std;
+
+/*辗转相除法，求a和b的最大公约数*/ 
+int gcd(int a, int b)
+{
+if(b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+
+int main()
+{
+    int x1, y1, x2, y2;
+    scanf(&quot;%d%d%d%d&quot;, &amp;x1, &amp;y1, &amp;x2, &amp;y2);
+    int dx = abs(x1 - x2);
+    int dy = abs(y1 - y2);
+    int ans;
+    if(!dx &amp;&amp; !dy){
+        //特判dx==0&amp;&amp;dy==0的情况 
+        ans = 0;
+    }
+    else{
+        ans = gcd(dx, dy) - 1;
+    }
+    printf(&quot;%d\n&quot;, ans);
+}
+
+</code></pre>
+
+
+
+
+<footer class=" footline" >
 	
-  
+</footer>
+
         
         </div> 
         
@@ -463,8 +570,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -481,6 +586,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -495,6 +601,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -576,6 +685,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -594,6 +704,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -668,8 +781,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/algorithms/%E6%95%B0%E8%AE%BA/%E5%8F%8C%E5%85%AD/" title="双六"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/algorithms/" title="算法" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/algorithms/%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="线段树" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -679,19 +794,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1580734052"></script>
-    <script src="/js/perfect-scrollbar.min.js?1580734052"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1580734052"></script>
-    <script src="/js/jquery.sticky.js?1580734052"></script>
-    <script src="/js/featherlight.min.js?1580734052"></script>
-    <script src="/js/highlight.pack.js?1580734052"></script>
+    <script src="/js/clipboard.min.js?1580734051"></script>
+    <script src="/js/perfect-scrollbar.min.js?1580734051"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1580734051"></script>
+    <script src="/js/jquery.sticky.js?1580734051"></script>
+    <script src="/js/featherlight.min.js?1580734051"></script>
+    <script src="/js/highlight.pack.js?1580734051"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1580734052"></script>
-    <script src="/js/learn.js?1580734052"></script>
-    <script src="/js/hugo-learn.js?1580734052"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1580734051"></script>
+    <script src="/js/learn.js?1580734051"></script>
+    <script src="/js/hugo-learn.js?1580734051"></script>
 
-    <link href="/mermaid/mermaid.css?1580734052" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1580734052"></script>
+    <link href="/mermaid/mermaid.css?1580734051" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1580734051"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
@@ -699,4 +814,3 @@
 
   </body>
 </html>
-

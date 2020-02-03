@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>HomePage :: My New Hugo Site</title>
+    <title>区间筛法 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1580734051" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/">
+  <body class="" data-url="/algorithms/%E6%95%B0%E8%AE%BA/%E5%8C%BA%E9%97%B4%E7%AD%9B%E6%B3%95/">
     <nav id="sidebar" class="">
 
 
@@ -73,7 +73,7 @@
   
     
     <li data-nav-id="/algorithms/" title="算法" class="dd-item 
-        
+        parent
         
         
         ">
@@ -100,7 +100,7 @@
   
     
     <li data-nav-id="/algorithms/%E6%95%B0%E8%AE%BA/" title="数论" class="dd-item 
-        
+        parent
         
         
         ">
@@ -127,8 +127,8 @@
   
     
     <li data-nav-id="/algorithms/%E6%95%B0%E8%AE%BA/%E5%8C%BA%E9%97%B4%E7%AD%9B%E6%B3%95/" title="区间筛法" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/algorithms/%E6%95%B0%E8%AE%BA/%E5%8C%BA%E9%97%B4%E7%AD%9B%E6%B3%95/">
@@ -408,30 +408,158 @@
         <div id="overlay"></div>
         <div class="padding highlightable">
               
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/algorithms/'>算法</a> > <a href='/algorithms/%E6%95%B0%E8%AE%BA/'>数论</a> > 区间筛法
+          
+         
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
         <div id="head-tags">
         
         </div>
         
         <div id="body-inner">
           
+            <h1>
+              
+              区间筛法
+            </h1>
+          
 
         
 
 
-<span id="sidebar-toggle-span">
-<a href="#" id="sidebar-toggle" data-sidebar-toggle=""><i class="fas fa-bars"></i> navigation</a>
-</span>
 
- 
-<h2 id="欢迎来到zjq的博客">欢迎来到ZJQ的博客</h2>
+
+	<h2 id="题目描述">题目描述</h2>
+<p>求区间[a, b)内素数个数？其中a, b范围为1e12, b-a的范围是1e6</p>
+<h2 id="解题思路">解题思路</h2>
 <ul>
-<li>本博客是基于<a href="https://gohugo.io/">hugo</a>框架搭建的静态博客。本人第一次搭博客，动态博客也写不来，而且也设计不出这些主题。</li>
-<li>博客内容以学习为主，经初步构思，本博客主要用来记录算法、计算机知识、电脑使用知识等。</li>
-<li>佛系更新，更新快说明在认真学习ing，更新慢说明在摸鱼&hellip;&hellip;</li>
-<li>祝大家开心快乐，学习进步！</li>
+<li>利用素数筛法。b以内的合数的最小质因数一定不超过sqrt(b)。因此在[2, sqrt(b))上筛素数的同时，也可将[a,b)中的合数筛去。</li>
+<li>因为题中a,b较大，所以构建[a, b)的表需要映射成0~b-a。</li>
+<li>题中的乘法需要long long范围，因此可将所有数都用long long范围。</li>
 </ul>
+<h2 id="代码">代码</h2>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdlib&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;queue&gt;
+#include&lt;string&gt;
+#include&lt;stack&gt;
+#include&lt;cmath&gt;
+using namespace std;
+
+typedef long long ll;
+const long long MAXN = 1e6 + 10;
+
+bool is_prime[MAXN];//is_prime[i - a]判断i是否为素数，筛[a, b)
+bool is_prime_small[MAXN];//is_prime_small[i]判断i是否为素数,筛[2, sqrt(b))
+
+/*
+对区间[a, b)内的整数进行筛法
+*/
+ll segment_sieve(ll a, ll b)
+{
+    for(ll i = 0; i * i &lt; b; ++i){
+        is_prime_small[i] = true;
+    }
+    for(ll i = 0, j = b - a; i &lt; j; ++i){
+        is_prime[i] = true;
+    }
+    for(ll i = 2; i * i &lt; b; ++i){
+        if(is_prime_small[i]){
+            //筛[2, sqrt(b))
+            for(ll j = 2*i; j * j &lt; b; j += i){
+                is_prime_small[j] = false;
+            }
+            //筛[a, b)
+            for(ll j = max((a + i - 1)/i, 2LL)*i; j &lt; b; j += i){
+                is_prime[j - a] = false;
+            }
+        }
+    }
+    ll ans = 0;
+    for(ll i = 0, j = b - a; i &lt; j; ++i){
+        if(is_prime[i])
+            ans++;
+    }
+    return ans;
+}
+int main()
+{
+    ll a,  b;
+    scanf(&quot;%lld%lld&quot;, &amp;a, &amp;b);
+    ll ans = segment_sieve(a, b);
+    printf(&quot;%lld\n&quot;, ans);
+    return 0;
+}
+
+</code></pre>
+
+
+
+
+<footer class=" footline" >
 	
-  
+</footer>
+
         
         </div> 
         
@@ -463,8 +591,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -481,6 +607,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -495,6 +622,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -511,6 +639,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -668,8 +799,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/algorithms/%E6%95%B0%E8%AE%BA/" title="数论"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/algorithms/" title="算法" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/algorithms/%E6%95%B0%E8%AE%BA/carmichael-numbers/" title="Carmichael Numbers" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -679,19 +812,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1580734052"></script>
-    <script src="/js/perfect-scrollbar.min.js?1580734052"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1580734052"></script>
-    <script src="/js/jquery.sticky.js?1580734052"></script>
-    <script src="/js/featherlight.min.js?1580734052"></script>
-    <script src="/js/highlight.pack.js?1580734052"></script>
+    <script src="/js/clipboard.min.js?1580734051"></script>
+    <script src="/js/perfect-scrollbar.min.js?1580734051"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1580734051"></script>
+    <script src="/js/jquery.sticky.js?1580734051"></script>
+    <script src="/js/featherlight.min.js?1580734051"></script>
+    <script src="/js/highlight.pack.js?1580734051"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1580734052"></script>
-    <script src="/js/learn.js?1580734052"></script>
-    <script src="/js/hugo-learn.js?1580734052"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1580734051"></script>
+    <script src="/js/learn.js?1580734051"></script>
+    <script src="/js/hugo-learn.js?1580734051"></script>
 
-    <link href="/mermaid/mermaid.css?1580734052" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1580734052"></script>
+    <link href="/mermaid/mermaid.css?1580734051" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1580734051"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
@@ -699,4 +832,3 @@
 
   </body>
 </html>
-
