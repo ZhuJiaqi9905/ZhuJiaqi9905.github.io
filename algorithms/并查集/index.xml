@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>并查集 on My New Hugo Site</title>
+    <link>https://zhujiaqi9905.github.io/algorithms/%E5%B9%B6%E6%9F%A5%E9%9B%86/</link>
+    <description>Recent content in 并查集 on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 13 Feb 2020 08:40:00 +0800</lastBuildDate>
+    
+	<atom:link href="https://zhujiaqi9905.github.io/algorithms/%E5%B9%B6%E6%9F%A5%E9%9B%86/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+  </channel>
+</rss>
