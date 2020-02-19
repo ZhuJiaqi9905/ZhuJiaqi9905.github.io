@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>并查集 :: My New Hugo Site</title>
+    <title>部分和问题 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582121371" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/algorithms/%E5%B9%B6%E6%9F%A5%E9%9B%86/">
+  <body class="" data-url="/algorithms/%E6%90%9C%E7%B4%A2/%E9%83%A8%E5%88%86%E5%92%8C%E9%97%AE%E9%A2%98/">
     <nav id="sidebar" class="">
 
 
@@ -100,7 +100,7 @@
   
     
     <li data-nav-id="/algorithms/%E6%90%9C%E7%B4%A2/" title="搜索" class="dd-item 
-        
+        parent
         
         
         ">
@@ -175,8 +175,8 @@
   
     
     <li data-nav-id="/algorithms/%E6%90%9C%E7%B4%A2/%E9%83%A8%E5%88%86%E5%92%8C%E9%97%AE%E9%A2%98/" title="部分和问题" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/algorithms/%E6%90%9C%E7%B4%A2/%E9%83%A8%E5%88%86%E5%92%8C%E9%97%AE%E9%A2%98/">
@@ -208,8 +208,8 @@
   
     
     <li data-nav-id="/algorithms/%E5%B9%B6%E6%9F%A5%E9%9B%86/" title="并查集" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/algorithms/%E5%B9%B6%E6%9F%A5%E9%9B%86/">
@@ -1059,7 +1059,13 @@
             
           
           
-            <a href='/'>HomePage</a> > <a href='/algorithms/'>算法</a> > 并查集
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/algorithms/'>算法</a> > <a href='/algorithms/%E6%90%9C%E7%B4%A2/'>搜索</a> > 部分和问题
+          
+         
           
          
           
@@ -1072,7 +1078,13 @@
                 
                     <div class="progress">
     <div class="wrapper">
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1088,7 +1100,7 @@
           
             <h1>
               
-              并查集
+              部分和问题
             </h1>
           
 
@@ -1097,7 +1109,60 @@
 
 
 
-	
+	<h2 id="题目描述">题目描述</h2>
+<p>给定n(n&lt;20)个数，判断是否可以从中选出若干个数，使他们的和为k。</p>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>用dfs枚举可能的组合</li>
+</ul>
+<h2 id="代码">代码</h2>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdlib&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;queue&gt;
+#include&lt;string&gt;
+using namespace std;
+const int MAXN = 30;
+int n;//n个数
+int k;
+int a[MAXN];
+bool dfs(int x, int sum);
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;n);
+    int i;
+    for (i = 0; i &lt; n; ++i) {
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    }
+    scanf(&quot;%d&quot;, &amp;k);
+    bool ans;
+    ans = dfs(0, 0);
+    if (ans) {
+        printf(&quot;Yes\n&quot;);
+    }
+    else
+        printf(&quot;No\n&quot;);
+    return 0;
+}
+bool dfs(int x, int sum)
+{
+    if (x == n) {
+        if (sum == k)
+            return true;
+        return false;
+    }
+    //不加上a[x]
+    if (dfs(x + 1, sum))
+        return true;
+    //加上a[x]
+    if (dfs(x + 1, sum + a[x]))
+        return true;
+    return false;
+}
+</code></pre>
 
 
 
@@ -1153,8 +1218,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -1171,21 +1234,8 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
+                        
                     
                 
                 
@@ -1214,6 +1264,23 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1222,6 +1289,8 @@
             
                 
                     
+                        
+                        
                     
                 
                 
@@ -1237,9 +1306,6 @@
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -1727,10 +1793,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/algorithms/%E6%90%9C%E7%B4%A2/%E9%83%A8%E5%88%86%E5%92%8C%E9%97%AE%E9%A2%98/" title="部分和问题"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/algorithms/%E6%90%9C%E7%B4%A2/lake-counting/" title="Lake Counting"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/algorithms/%E5%B9%B6%E6%9F%A5%E9%9B%86/a-bugs-life/" title="A Bug&#39;s Life" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/algorithms/%E5%B9%B6%E6%9F%A5%E9%9B%86/" title="并查集" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
