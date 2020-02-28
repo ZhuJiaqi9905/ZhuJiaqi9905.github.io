@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>Radar Installation :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E8%B4%AA%E5%BF%83/radar-installation/">
     <nav id="sidebar" class="">
 
 
@@ -146,7 +146,7 @@
   
     
     <li data-nav-id="/%E8%B4%AA%E5%BF%83/" title="贪心" class="dd-item 
-        
+        parent
         
         
         ">
@@ -170,7 +170,7 @@
  
   
     
-      <li data-nav-id="/%E8%B4%AA%E5%BF%83/radar-installation/" title="Radar Installation" class="dd-item ">
+      <li data-nav-id="/%E8%B4%AA%E5%BF%83/radar-installation/" title="Radar Installation" class="dd-item active">
         <a href="/%E8%B4%AA%E5%BF%83/radar-installation/">
         Radar Installation
         
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E8%B4%AA%E5%BF%83/'>贪心</a> > Radar Installation
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              Radar Installation
             </h1>
           
 
@@ -1276,17 +1289,92 @@
 
 
 
-
-
-
+<h2 id="题目链接">题目链接</h2>
+<p><a href="http://bailian.openjudge.cn/practice/1328">百练 Radar Installation</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>有n个岛屿的x,y坐标，要往x轴上装雷达，已知雷达与岛屿的有效距离d。求最少装几个雷达，能覆盖全部岛屿。如果没有解，输出-1</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>贪心</li>
+<li>首先利用坐标和d计算每个岛屿对应的有效雷达在x轴上的区间。</li>
+<li>将区间按右端点从小到大排序，右端点相同的，按左端点从大到小排序。</li>
+<li>首先在0号区间的右端点装雷达，然后判断它能覆盖几个区间。遇到不能覆盖的区间，就在它的右端点装个雷达，以此类推。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> n;<span style="color:#75715e">//n个岛屿
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> d;<span style="color:#75715e">//距离
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Line</span> {
+    <span style="color:#66d9ef">double</span> s;
+    <span style="color:#66d9ef">double</span> e;
+    <span style="color:#75715e">//将区间按右端点从小到大排序，右端点相同的，按左端点从大到小排
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">bool</span> <span style="color:#66d9ef">operator</span> <span style="color:#f92672">&lt;</span>(<span style="color:#66d9ef">const</span> Line<span style="color:#f92672">&amp;</span> l)<span style="color:#66d9ef">const</span> {
+        <span style="color:#66d9ef">if</span> (e <span style="color:#f92672">=</span><span style="color:#f92672">=</span> l.e) {
+            <span style="color:#66d9ef">return</span> s <span style="color:#f92672">&gt;</span> l.s;
+        }
+        <span style="color:#66d9ef">return</span> e <span style="color:#f92672">&lt;</span> l.e;
+    }
+};
+Line line[<span style="color:#ae81ff">1010</span>];
+Line <span style="color:#a6e22e">getLine</span>(<span style="color:#66d9ef">int</span> x, <span style="color:#66d9ef">int</span> y);
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    <span style="color:#66d9ef">int</span> kase <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">while</span> (scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n, <span style="color:#f92672">&amp;</span>d)) {
+        <span style="color:#66d9ef">if</span> (n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> d <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>)    <span style="color:#66d9ef">break</span>;
+        <span style="color:#66d9ef">int</span> i, j; <span style="color:#66d9ef">int</span> x, y;
+        kase<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+        <span style="color:#66d9ef">bool</span> noAns <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>x, <span style="color:#f92672">&amp;</span>y);
+            <span style="color:#66d9ef">if</span> (y <span style="color:#f92672">&gt;</span> d) {
+                noAns <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+            }
+            <span style="color:#66d9ef">else</span> {
+                line[i] <span style="color:#f92672">=</span> getLine(x, y);
+            }
+            
+        }
+        <span style="color:#66d9ef">if</span> (noAns) {
+            printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Case %d: -1</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, kase);
+            <span style="color:#66d9ef">continue</span>;<span style="color:#75715e">//注意这里不是break
+</span><span style="color:#75715e"></span>        }
+        sort(line, line <span style="color:#f92672">+</span> n);
+        <span style="color:#66d9ef">int</span> total <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">int</span> temp <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            <span style="color:#66d9ef">if</span> (line[i].s <span style="color:#f92672">&gt;</span> line[temp].e) {
+                temp <span style="color:#f92672">=</span> i; total<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+            }
+        }
+        
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Case %d: %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, kase, total);
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+Line <span style="color:#a6e22e">getLine</span>(<span style="color:#66d9ef">int</span> x, <span style="color:#66d9ef">int</span> y) {
+    Line temp;
+    temp.s <span style="color:#f92672">=</span> (<span style="color:#66d9ef">double</span>)x <span style="color:#f92672">-</span> sqrt(d <span style="color:#f92672">*</span> d <span style="color:#f92672">-</span> y <span style="color:#f92672">*</span> y);
+    temp.e <span style="color:#f92672">=</span> (<span style="color:#66d9ef">double</span>)x <span style="color:#f92672">+</span> sqrt(d <span style="color:#f92672">*</span> d <span style="color:#f92672">-</span> y <span style="color:#f92672">*</span> y);
+    <span style="color:#66d9ef">return</span> temp;
+}
 
+</code></pre></div>
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1370,6 +1458,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1382,6 +1471,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1398,6 +1488,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2141,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E8%B4%AA%E5%BF%83/" title="贪心"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E8%B4%AA%E5%BF%83/%E5%9C%A3%E8%AF%9E%E8%80%81%E4%BA%BA%E7%9A%84%E7%A4%BC%E7%89%A9/" title="圣诞老人的礼物" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -2079,3 +2174,4 @@
 
   </body>
 </html>
+

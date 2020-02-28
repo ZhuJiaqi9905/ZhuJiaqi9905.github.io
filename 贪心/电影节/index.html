@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>电影节 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E8%B4%AA%E5%BF%83/%E7%94%B5%E5%BD%B1%E8%8A%82/">
     <nav id="sidebar" class="">
 
 
@@ -146,7 +146,7 @@
   
     
     <li data-nav-id="/%E8%B4%AA%E5%BF%83/" title="贪心" class="dd-item 
-        
+        parent
         
         
         ">
@@ -208,7 +208,7 @@
  
   
     
-      <li data-nav-id="/%E8%B4%AA%E5%BF%83/%E7%94%B5%E5%BD%B1%E8%8A%82/" title="电影节" class="dd-item ">
+      <li data-nav-id="/%E8%B4%AA%E5%BF%83/%E7%94%B5%E5%BD%B1%E8%8A%82/" title="电影节" class="dd-item active">
         <a href="/%E8%B4%AA%E5%BF%83/%E7%94%B5%E5%BD%B1%E8%8A%82/">
         电影节
         
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E8%B4%AA%E5%BF%83/'>贪心</a> > 电影节
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              电影节
             </h1>
           
 
@@ -1276,17 +1289,66 @@
 
 
 
-
-
-
+<h2 id="题目链接">题目链接</h2>
+<p><a href="http://bailian.openjudge.cn/practice/4151">百练 电影节</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>给一堆电影的开始时间和结束时间，问最多可以看几部电影</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>贪心</li>
+<li>按电影的结束时间先后排序。从第一个电影开始看，结束后就看下一个能看的电影。注意一个电影的结束时间和另一个的开始时间能重合。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> n;
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Movie</span> {
+    <span style="color:#66d9ef">int</span> s;
+    <span style="color:#66d9ef">int</span> e;
+    <span style="color:#66d9ef">bool</span> <span style="color:#66d9ef">operator</span> <span style="color:#f92672">&lt;</span>(<span style="color:#66d9ef">const</span> Movie<span style="color:#f92672">&amp;</span> m)<span style="color:#66d9ef">const</span> {
+        <span style="color:#66d9ef">return</span> e <span style="color:#f92672">&lt;</span> m.e;
+    }
+};
+Movie mve[<span style="color:#ae81ff">1010</span>];<span style="color:#75715e">//电影的开始时间和结束时间
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    <span style="color:#66d9ef">while</span> (scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n)) {
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>n) {
+            <span style="color:#66d9ef">break</span>;
+        }
+        <span style="color:#66d9ef">int</span> i;
+        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>mve[i].s, <span style="color:#f92672">&amp;</span>mve[i].e);
+        }
+        sort(mve, mve <span style="color:#f92672">+</span> n);
+        <span style="color:#66d9ef">int</span> end <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">int</span> total <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            <span style="color:#66d9ef">if</span> (end <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> mve[i].s) {
+                <span style="color:#f92672">+</span><span style="color:#f92672">+</span>total;
+                end <span style="color:#f92672">=</span> mve[i].e;
+            }
+        }
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, total);
+        
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
 
+</code></pre></div>
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1370,6 +1432,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1382,6 +1445,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1415,6 +1481,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1430,6 +1497,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2118,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E8%B4%AA%E5%BF%83/%E5%9C%A3%E8%AF%9E%E8%80%81%E4%BA%BA%E7%9A%84%E7%A4%BC%E7%89%A9/" title="圣诞老人的礼物"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E8%B4%AA%E5%BF%83/stall-reservations/" title="Stall Reservations" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -2079,3 +2151,4 @@
 
   </body>
 </html>
+

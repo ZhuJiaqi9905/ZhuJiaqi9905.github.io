@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>决策树 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/">
     <nav id="sidebar" class="">
 
 
@@ -73,7 +73,7 @@
   
     
     <li data-nav-id="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" class="dd-item 
-        
+        parent
         
         
         ">
@@ -97,7 +97,7 @@
  
   
     
-      <li data-nav-id="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/" title="决策树" class="dd-item ">
+      <li data-nav-id="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/" title="决策树" class="dd-item active">
         <a href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/">
         决策树
         
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/'>机器学习</a> > 决策树
+          
+         
           
          
           
@@ -1252,7 +1258,12 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#简述">简述</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1279,7 @@
           
             <h1>
               
-              Categories
+              决策树
             </h1>
           
 
@@ -1276,17 +1287,253 @@
 
 
 
-
-
-
+<h2 id="简述">简述</h2>
 <ul>
-	
+<li>决策树是一种类似于规则学习的机器学习方法。决策树的每个结点代表一个属性，分支代表该属性的取值。</li>
+<li>构造时通过计算每个特征的信息增益，来找到当前最好的用于分类的特征。</li>
+<li>决策树在python中是一个多层嵌套的字典，利用递归的方式生成</li>
+<li>两大块代码，一块用于建树，一块用于画出树的图。</li>
+<li>建树的代码中，感觉把树存到文件的代码有点问题，以后会改正。因为我对matplotlib不熟，所以画图代码还需要改进。</li>
 </ul>
+<h2 id="代码">代码</h2>
+<ul>
+<li>建树部分</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> math <span style="color:#f92672">import</span> log 
+<span style="color:#f92672">import</span> operator
+<span style="color:#f92672">import</span> pickle 
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calShannonEnt</span>(dataSet):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">计算集合的香侬熵</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    numEntries <span style="color:#f92672">=</span> len(dataSet)
+    labelCounts <span style="color:#f92672">=</span> {} <span style="color:#75715e">#记录每种标签的个数</span>
+    <span style="color:#66d9ef">for</span> featVec <span style="color:#f92672">in</span> dataSet:
+        currentLabel <span style="color:#f92672">=</span> featVec[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+        <span style="color:#66d9ef">if</span> currentLabel <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> labelCounts<span style="color:#f92672">.</span>keys():
+            labelCounts[currentLabel] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> 
+        <span style="color:#66d9ef">else</span>:
+            labelCounts[currentLabel] <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> 
+    shannonEnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+    <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> labelCounts:
+        prob <span style="color:#f92672">=</span> float(labelCounts[key]) <span style="color:#f92672">/</span> numEntries
+        shannonEnt <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#f92672">-</span>prob <span style="color:#f92672">*</span> log(prob, <span style="color:#ae81ff">2</span>) 
+    <span style="color:#66d9ef">return</span> shannonEnt
 
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">splitDataSet</span>(dataSet, axis, value):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">按照给定特征划分数据集</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    axis 特征, </span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    value 特征的取值</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    
+    retDataSet <span style="color:#f92672">=</span> []
+    <span style="color:#66d9ef">for</span> featVec <span style="color:#f92672">in</span> dataSet:
+        <span style="color:#66d9ef">if</span> featVec[axis] <span style="color:#f92672">==</span> value:
+            <span style="color:#75715e">#把数据集中axis的特征抽走</span>
+            reducedFeatVec <span style="color:#f92672">=</span> featVec[ : axis]
+            reducedFeatVec<span style="color:#f92672">.</span>extend(featVec[axis<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span> :]) <span style="color:#75715e">#注意这是extend</span>
+            <span style="color:#75715e">#样本加入新的集合</span>
+            retDataSet<span style="color:#f92672">.</span>append(reducedFeatVec)
+    <span style="color:#66d9ef">return</span> retDataSet
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">chooseBestFeatureToSplit</span>(dataSet):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">选取最好的数据集划分方式</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    numFeatures <span style="color:#f92672">=</span> len(dataSet[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>
+    baseEntropy <span style="color:#f92672">=</span> calShannonEnt(dataSet)
+    bestInfoGain <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+    bestFeature <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(numFeatures):
+        <span style="color:#75715e">#找出特征i的所有值</span>
+        featList <span style="color:#f92672">=</span> [example[i] <span style="color:#66d9ef">for</span> example <span style="color:#f92672">in</span> dataSet] 
+        uniqueVals <span style="color:#f92672">=</span> set(featList)
+        newEntropy <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span> 
+        <span style="color:#66d9ef">for</span> value <span style="color:#f92672">in</span> uniqueVals:
+            <span style="color:#75715e">#划分数据集</span>
+            subDataSet <span style="color:#f92672">=</span> splitDataSet(dataSet, i, value)
+            <span style="color:#75715e">#计算划分后引起的熵变化</span>
+            prob <span style="color:#f92672">=</span> len(subDataSet) <span style="color:#f92672">/</span> float(len(dataSet)) 
+            newEntropy <span style="color:#f92672">+</span><span style="color:#f92672">=</span> prob <span style="color:#f92672">*</span> calShannonEnt(subDataSet) 
+        <span style="color:#75715e">#计算信息增益</span>
+        infoGain <span style="color:#f92672">=</span> baseEntropy <span style="color:#f92672">-</span> newEntropy
+        <span style="color:#66d9ef">if</span> infoGain <span style="color:#f92672">&gt;</span> bestInfoGain:
+            bestInfoGain <span style="color:#f92672">=</span> infoGain
+            bestFeature <span style="color:#f92672">=</span> i 
+    <span style="color:#66d9ef">return</span> bestFeature 
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">majorityCnt</span>(classList):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    计算某一特征中出现频率最高的取值,</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    classList 样本中某个特征的取值列表</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    </span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    classCount <span style="color:#f92672">=</span> {} 
+    <span style="color:#66d9ef">for</span> vote <span style="color:#f92672">in</span> classList:
+        <span style="color:#66d9ef">if</span> vote <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> classCount<span style="color:#f92672">.</span>keys():
+            classCount[vote] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">else</span>:
+            classCount[vote] <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> 
+    <span style="color:#75715e">#按出现频率从高到低排序</span>
+    <span style="color:#75715e">#classCount.items()返回一个可遍历的(键, 值) 元组数组</span>
+    sortedClassCount <span style="color:#f92672">=</span> sorted(classCount<span style="color:#f92672">.</span>items(), key<span style="color:#f92672">=</span>operator<span style="color:#f92672">.</span>itemgetter(<span style="color:#ae81ff">1</span>), reverse<span style="color:#f92672">=</span>True)
+    <span style="color:#66d9ef">return</span> sortedClassCount[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>]
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">createTree</span>(dataSet, labels):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">构造决策树，返回值是类别标签</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    classList <span style="color:#f92672">=</span> [example[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#66d9ef">for</span> example <span style="color:#f92672">in</span> dataSet] 
+    <span style="color:#75715e">#如果数据集中全是相同标签的样本，则停止划分</span>
+    <span style="color:#66d9ef">if</span> classList<span style="color:#f92672">.</span>count(classList[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">==</span> len(classList):
+        <span style="color:#66d9ef">return</span> classList[<span style="color:#ae81ff">0</span>] 
+    <span style="color:#75715e">#如果使用完所有特征，仍不能划分完全，就返回出现次数最多的类别</span>
+    <span style="color:#66d9ef">if</span> len(dataSet[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+        <span style="color:#66d9ef">return</span> majorityCnt(classList) 
+    <span style="color:#75715e">#找到当前最好的划分特征</span>
+    bestFeat <span style="color:#f92672">=</span> chooseBestFeatureToSplit(dataSet)
+    bestFeatLabel <span style="color:#f92672">=</span> labels[bestFeat]
+    <span style="color:#75715e">#树的结构是一个多层嵌套的字典 </span>
+    myTree <span style="color:#f92672">=</span> {bestFeatLabel:{}} 
+    <span style="color:#66d9ef">del</span>(labels[bestFeat])
+    <span style="color:#75715e">#得到该属性的所有属性值</span>
+    featValues <span style="color:#f92672">=</span> [example[bestFeat] <span style="color:#66d9ef">for</span> example <span style="color:#f92672">in</span> dataSet] 
+    uniqueVals <span style="color:#f92672">=</span> set(featValues) 
+    <span style="color:#66d9ef">for</span> value <span style="color:#f92672">in</span> uniqueVals:
+        subLabels <span style="color:#f92672">=</span> labels[:] <span style="color:#75715e">#复制标签</span>
+        myTree[bestFeatLabel][value] <span style="color:#f92672">=</span> createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
+    <span style="color:#66d9ef">return</span> myTree 
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">classify</span>(inputTree, featLabels, testVec):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">分类器</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    firstStr <span style="color:#f92672">=</span> list(inputTree<span style="color:#f92672">.</span>keys())[<span style="color:#ae81ff">0</span>] 
+    secondDict <span style="color:#f92672">=</span> inputTree[firstStr] 
+    featIndex <span style="color:#f92672">=</span> featLabels<span style="color:#f92672">.</span>index(firstStr)
+    <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> secondDict<span style="color:#f92672">.</span>keys():
+        <span style="color:#66d9ef">if</span> testVec[featIndex] <span style="color:#f92672">==</span> key:
+            <span style="color:#66d9ef">if</span> type(secondDict[key])<span style="color:#f92672">.</span>__name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dict</span><span style="color:#e6db74">&#39;</span>:
+                classLabel <span style="color:#f92672">=</span> classify(secondDict[key], featLabels, testVec) 
+            <span style="color:#66d9ef">else</span>:
+                classLabel <span style="color:#f92672">=</span> secondDict[key] 
+    <span style="color:#66d9ef">return</span> classLabel 
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">storeTree</span>(inputTree, filename):
+    fw <span style="color:#f92672">=</span> open(filename, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">wb</span><span style="color:#e6db74">&#39;</span>) 
+    pickle<span style="color:#f92672">.</span>dump(inputTree, fw) 
+    fw<span style="color:#f92672">.</span>close()
+    
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">grabTree</span>(filename):
+    fr <span style="color:#f92672">=</span> open(filename, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">rb</span><span style="color:#e6db74">&#39;</span>)
+    tree <span style="color:#f92672">=</span> pickle<span style="color:#f92672">.</span>load(fr)  
+    fr<span style="color:#f92672">.</span>close() 
+    <span style="color:#66d9ef">return</span> tree 
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">creatDateSet</span>():
+    dataSet <span style="color:#f92672">=</span> [ [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yes</span><span style="color:#e6db74">&#39;</span>],
+                [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yes</span><span style="color:#e6db74">&#39;</span>],
+                [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">no</span><span style="color:#e6db74">&#39;</span>],
+                [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">no</span><span style="color:#e6db74">&#39;</span>],
+                [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">no</span><span style="color:#e6db74">&#39;</span>]]
+    labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">no surfacing</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">flippers</span><span style="color:#e6db74">&#39;</span>] 
+    <span style="color:#66d9ef">return</span> dataSet, labels 
+
+dataSet , labels <span style="color:#f92672">=</span> creatDateSet()
+
+myTree <span style="color:#f92672">=</span> createTree(dataSet, labels[:]) 
+storeTree(myTree, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">./test.txt</span><span style="color:#e6db74">&#34;</span>) 
+<span style="color:#75715e">#newTree = grabTree(&#34;./test.txt&#34;) </span>
+<span style="color:#75715e">#print( classify(newTree, labels, [1, 1]) ) </span>
+<span style="color:#75715e">#print(myTree)</span>
+</code></pre></div><ul>
+<li>画图部分</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt 
+<span style="color:#75715e">#绘制树的结点</span>
+<span style="color:#75715e">#定义文本框和箭头格式</span>
+decisionNode <span style="color:#f92672">=</span> dict(boxstyle<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">sawtooth</span><span style="color:#e6db74">&#34;</span>, fc<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">0.8</span><span style="color:#e6db74">&#34;</span>) 
+leafNode <span style="color:#f92672">=</span> dict(boxstyle<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">round4</span><span style="color:#e6db74">&#34;</span>, fc<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">0.8</span><span style="color:#e6db74">&#34;</span>) 
+arrow_args <span style="color:#f92672">=</span> dict(arrowstyle<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&lt;-</span><span style="color:#e6db74">&#34;</span>)
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">plotNode</span>(nodeTxt, centerPt, parentPt, nodeType):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">绘制带箭头的注解</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    <span style="color:#75715e"># annotate是关于一个数据点的文本  </span>
+    <span style="color:#75715e"># nodeTxt为要显示的文本，centerPt为文本的中心点，箭头所在的点，parentPt为指向文本的点  </span>
+    <span style="color:#75715e">#annotate的作用是添加注释，nodetxt是注释的内容，</span>
+    <span style="color:#75715e">#nodetype指的是输入的节点（边框）的形状</span>
+    createPlot<span style="color:#f92672">.</span>ax1<span style="color:#f92672">.</span>annotate(nodeTxt, xy<span style="color:#f92672">=</span>parentPt, xycoords<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes fraction</span><span style="color:#e6db74">&#39;</span>, xytext<span style="color:#f92672">=</span>centerPt, \
+        textcoords<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes fraction</span><span style="color:#e6db74">&#39;</span>, va<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">center</span><span style="color:#e6db74">&#34;</span>, ha<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">center</span><span style="color:#e6db74">&#34;</span>, bbox<span style="color:#f92672">=</span>nodeType, arrowprops<span style="color:#f92672">=</span>arrow_args)
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">plotMidText</span>(cntrPt,parentPt,txtString):
+    <span style="color:#75715e">#作用是计算tree的中间位置    </span>
+    <span style="color:#75715e"># cntrpt起始位置, parentpt终止位置, txtstring：文本标签信息</span>
+    <span style="color:#75715e">#找到x和y的中间位置</span>
+    xmid <span style="color:#f92672">=</span> (parentPt[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">-</span> cntrPt[<span style="color:#ae81ff">0</span>])<span style="color:#f92672">/</span><span style="color:#ae81ff">2.0</span> <span style="color:#f92672">+</span> cntrPt[<span style="color:#ae81ff">0</span>] 
+    ymid<span style="color:#f92672">=</span>(parentPt[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">-</span>cntrPt[<span style="color:#ae81ff">1</span>])<span style="color:#f92672">/</span><span style="color:#ae81ff">2.0</span><span style="color:#f92672">+</span>cntrPt[<span style="color:#ae81ff">1</span>]  
+    createPlot<span style="color:#f92672">.</span>ax1<span style="color:#f92672">.</span>text(xmid,ymid,txtString)
+    
+    
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">plotTree</span>(myTree,parentPt,nodetxt):
+    numleafs<span style="color:#f92672">=</span>getNumLeafs(myTree)
+    depth<span style="color:#f92672">=</span>getTreeDepth(myTree)
+    firststr<span style="color:#f92672">=</span>list(myTree<span style="color:#f92672">.</span>keys())[<span style="color:#ae81ff">0</span>]
+    cntrpt<span style="color:#f92672">=</span>(plotTree<span style="color:#f92672">.</span>xoff<span style="color:#f92672">+</span>(<span style="color:#ae81ff">1.0</span><span style="color:#f92672">+</span>float(numleafs))<span style="color:#f92672">/</span><span style="color:#ae81ff">2.0</span><span style="color:#f92672">/</span>plotTree<span style="color:#f92672">.</span>totalw,plotTree<span style="color:#f92672">.</span>yoff)<span style="color:#75715e">#计算子节点的坐标 </span>
+    plotMidText(cntrpt,parentPt,nodetxt) <span style="color:#75715e">#绘制线上的文字  </span>
+    plotNode(firststr,cntrpt,parentPt,decisionNode)<span style="color:#75715e">#绘制节点  </span>
+    seconddict<span style="color:#f92672">=</span>myTree[firststr]
+    plotTree<span style="color:#f92672">.</span>yoff<span style="color:#f92672">=</span>plotTree<span style="color:#f92672">.</span>yoff<span style="color:#f92672">-</span><span style="color:#ae81ff">1.0</span><span style="color:#f92672">/</span>plotTree<span style="color:#f92672">.</span>totald<span style="color:#75715e">#每绘制一次图，将y的坐标减少1.0/plotTree.totald，间接保证y坐标上深度的</span>
+    <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> seconddict<span style="color:#f92672">.</span>keys():
+        <span style="color:#66d9ef">if</span> type(seconddict[key])<span style="color:#f92672">.</span>__name__<span style="color:#f92672">==</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dict</span><span style="color:#e6db74">&#39;</span>:
+            plotTree(seconddict[key],cntrpt,str(key))
+        <span style="color:#66d9ef">else</span>:
+            plotTree<span style="color:#f92672">.</span>xoff<span style="color:#f92672">=</span>plotTree<span style="color:#f92672">.</span>xoff<span style="color:#f92672">+</span><span style="color:#ae81ff">1.0</span><span style="color:#f92672">/</span>plotTree<span style="color:#f92672">.</span>totalw
+            plotNode(seconddict[key],(plotTree<span style="color:#f92672">.</span>xoff,plotTree<span style="color:#f92672">.</span>yoff),cntrpt, leafNode)
+            plotMidText((plotTree<span style="color:#f92672">.</span>xoff,plotTree<span style="color:#f92672">.</span>yoff),cntrpt,str(key))
+    plotTree<span style="color:#f92672">.</span>yoff<span style="color:#f92672">=</span>plotTree<span style="color:#f92672">.</span>yoff<span style="color:#f92672">+</span><span style="color:#ae81ff">1.0</span><span style="color:#f92672">/</span>plotTree<span style="color:#f92672">.</span>totald
+ 
+    
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">createPlot</span>(intree):
+     <span style="color:#75715e"># 类似于Matlab的figure，定义一个画布(暂且这么称呼吧)，背景为白色 </span>
+    fig<span style="color:#f92672">=</span>plt<span style="color:#f92672">.</span>figure(<span style="color:#ae81ff">1</span>,facecolor<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">white</span><span style="color:#e6db74">&#39;</span>)
+    fig<span style="color:#f92672">.</span>clf()    <span style="color:#75715e"># 把画布清空 </span>
+    axprops<span style="color:#f92672">=</span>dict(xticks<span style="color:#f92672">=</span>[],yticks<span style="color:#f92672">=</span>[])   
+    <span style="color:#75715e"># createPlot.ax1为全局变量，绘制图像的句柄，subplot为定义了一个绘图，111表示figure中的图有1行1列，即1个，最后的1代表第一个图 </span>
+    <span style="color:#75715e"># frameon表示是否绘制坐标轴矩形 </span>
+    createPlot<span style="color:#f92672">.</span>ax1<span style="color:#f92672">=</span>plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">111</span>,frameon<span style="color:#f92672">=</span>False,<span style="color:#f92672">*</span><span style="color:#f92672">*</span>axprops) 
+    
+    plotTree<span style="color:#f92672">.</span>totalw<span style="color:#f92672">=</span>float(getNumLeafs(intree))
+    plotTree<span style="color:#f92672">.</span>totald<span style="color:#f92672">=</span>float(getTreeDepth(intree))
+    plotTree<span style="color:#f92672">.</span>xoff<span style="color:#f92672">=</span><span style="color:#f92672">-</span><span style="color:#ae81ff">0.6</span><span style="color:#f92672">/</span>plotTree<span style="color:#f92672">.</span>totalw;plotTree<span style="color:#f92672">.</span>yoff<span style="color:#f92672">=</span><span style="color:#ae81ff">1.2</span>;
+    plotTree(intree,(<span style="color:#ae81ff">0.5</span>,<span style="color:#ae81ff">1.0</span>),<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>)
+    plt<span style="color:#f92672">.</span>show()
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getNumLeafs</span>(myTree):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">得到树的叶节点数目</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    numLeafs <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> 
+    firstStr <span style="color:#f92672">=</span> list(myTree<span style="color:#f92672">.</span>keys())[<span style="color:#ae81ff">0</span>] <span style="color:#75715e">#由于dict_keys是不可索引的对象，所以转换成list </span>
+    secondDict <span style="color:#f92672">=</span> myTree[firstStr] 
+    <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> secondDict<span style="color:#f92672">.</span>keys():
+        <span style="color:#75715e">#如果结点数据类型是字典</span>
+        <span style="color:#66d9ef">if</span> type(secondDict[key])<span style="color:#f92672">.</span>__name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dict</span><span style="color:#e6db74">&#39;</span>:
+            numLeafs <span style="color:#f92672">+</span><span style="color:#f92672">=</span> getNumLeafs(secondDict[key]) 
+        <span style="color:#66d9ef">else</span>: numLeafs <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> 
+    <span style="color:#66d9ef">return</span> numLeafs 
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getTreeDepth</span>(myTree):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;&#39;&#39;</span><span style="color:#e6db74">得到树的层数</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+    maxDepth <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    firstStr <span style="color:#f92672">=</span> list(myTree<span style="color:#f92672">.</span>keys())[<span style="color:#ae81ff">0</span>] 
+    secondDict <span style="color:#f92672">=</span> myTree[firstStr] 
+    <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> secondDict<span style="color:#f92672">.</span>keys():
+        <span style="color:#66d9ef">if</span> type(secondDict[key])<span style="color:#f92672">.</span>__name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dict</span><span style="color:#e6db74">&#39;</span>:
+            thisDepth <span style="color:#f92672">=</span> getTreeDepth(secondDict[key]) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">else</span>:
+            thisDepth <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+        maxDepth <span style="color:#f92672">=</span> max([maxDepth, thisDepth]) 
+    <span style="color:#66d9ef">return</span> maxDepth
+
+
+tree <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">no surfacing</span><span style="color:#e6db74">&#39;</span>: {<span style="color:#ae81ff">0</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">no</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">1</span>: {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">flippers</span><span style="color:#e6db74">&#39;</span>: {<span style="color:#ae81ff">0</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">no</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">1</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yes</span><span style="color:#e6db74">&#39;</span>}}}}
+
+createPlot(tree)
+</code></pre></div>
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1319,8 +1566,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -1334,6 +1579,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1353,6 +1599,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2297,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E7%AE%97%E6%B3%95/" title="算法" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -2079,3 +2330,4 @@
 
   </body>
 </html>
+

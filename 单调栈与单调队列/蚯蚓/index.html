@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>蚯蚓 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/%E8%9A%AF%E8%9A%93/">
     <nav id="sidebar" class="">
 
 
@@ -615,7 +615,7 @@
   
     
     <li data-nav-id="/%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" title="单调栈与单调队列" class="dd-item 
-        
+        parent
         
         
         ">
@@ -642,8 +642,8 @@
   
     
     <li data-nav-id="/%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/%E8%9A%AF%E8%9A%93/" title="蚯蚓" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/%E8%9A%AF%E8%9A%93/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/'>单调栈与单调队列</a> > 蚯蚓
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              蚯蚓
             </h1>
           
 
@@ -1277,11 +1290,115 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="https://www.luogu.com.cn/problem/P12827">蚯蚓</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>见链接。</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>如果直接用优先队列会超时。</li>
+<li>首先考虑：没有被切过的蚯蚓，只要开始时按从大到小排序，那么今后的任意时刻，因为每次增加长度相同，所以一定是排在前面的先被切。</li>
+<li>被切过的蚯蚓分成两部分，较长的和较短的。对于较长的，先被切的一定比后被切的长。对于较短的，也如此。</li>
+<li>可以维护三个队列，队列1表示最开始的蚯蚓，队列2表示每一次被切的蚯蚓被分开的较长的那一部分，队列3表示每一次被切的蚯蚓被分开的较短的那一部分。</li>
+<li>因为队列1的元素是按时间顺序出队，队列2、3的元素是按时间顺序入队，所以对于增量的计算我们可以按照蚯蚓在队列中的标号。</li>
+<li>代码书写时，三个队列可用队列数组表示，这样有利于用循环进行枚举。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> MAXN <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e7</span>;
+<span style="color:#66d9ef">int</span> n, m, q, T;
+<span style="color:#66d9ef">double</span> u, v, p;
+<span style="color:#75715e">//三个队列
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> que[<span style="color:#ae81ff">4</span>][MAXN];
+<span style="color:#75715e">//每个队列的头尾坐标
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> head[<span style="color:#ae81ff">4</span>];
+<span style="color:#66d9ef">int</span> tail[<span style="color:#ae81ff">4</span>];
+
+<span style="color:#66d9ef">int</span> length[MAXN];<span style="color:#75715e">//length[i]记录i时刻被切的蚯蚓长度，在输出答案时用
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> finLength[MAXN];<span style="color:#75715e">//finLength[i]记录m秒后，排序后的蚯蚓长度，在输出答案时用
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getLength</span>(<span style="color:#66d9ef">int</span> t);
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printAns</span>();
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d%d%lf%lf%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n, <span style="color:#f92672">&amp;</span>m, <span style="color:#f92672">&amp;</span>q, <span style="color:#f92672">&amp;</span>u, <span style="color:#f92672">&amp;</span>v, <span style="color:#f92672">&amp;</span>T);
+    p <span style="color:#f92672">=</span> u <span style="color:#f92672">/</span> v;
+    <span style="color:#66d9ef">int</span> i, j;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>que[<span style="color:#ae81ff">1</span>][i]);
+    }
+    head[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> head[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> head[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    tail[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> n <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>; tail[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> tail[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    sort(que[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> head[<span style="color:#ae81ff">1</span>], que[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> tail[<span style="color:#ae81ff">1</span>], greater<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>());
+    <span style="color:#66d9ef">int</span> x; <span style="color:#66d9ef">int</span> lb, lc;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> m; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        x <span style="color:#f92672">=</span> getLength(i);
+        lb <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span>)floor(x <span style="color:#f92672">*</span> p);
+        lc <span style="color:#f92672">=</span> x <span style="color:#f92672">-</span> lb;
+        <span style="color:#66d9ef">if</span> (lb <span style="color:#f92672">&lt;</span> lc) swap(lb, lc);
+        que[<span style="color:#ae81ff">2</span>][tail[<span style="color:#ae81ff">2</span>]<span style="color:#f92672">+</span><span style="color:#f92672">+</span>] <span style="color:#f92672">=</span> lb;
+        que[<span style="color:#ae81ff">3</span>][tail[<span style="color:#ae81ff">3</span>]<span style="color:#f92672">+</span><span style="color:#f92672">+</span>] <span style="color:#f92672">=</span> lc;
+    }
+    printAns();
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getLength</span>(<span style="color:#66d9ef">int</span> t)
+{
+    <span style="color:#66d9ef">int</span> num <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        <span style="color:#66d9ef">if</span> (head[i] <span style="color:#f92672">&lt;</span> tail[i] <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> i <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> (que[i][head[i]] <span style="color:#f92672">+</span> (t <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> q <span style="color:#f92672">&gt;</span> sum)) {
+            sum <span style="color:#f92672">=</span> que[i][head[i]] <span style="color:#f92672">+</span> (t <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span> q;
+            num <span style="color:#f92672">=</span> i;
+        }
+        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (head[i]<span style="color:#f92672">&lt;</span>tail[i] <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> ( (que[i][head[i]] <span style="color:#f92672">+</span> (t <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> head[i]) <span style="color:#f92672">*</span> q) <span style="color:#f92672">&gt;</span> sum) ) {
+            sum <span style="color:#f92672">=</span> que[i][head[i]] <span style="color:#f92672">+</span> (t <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> head[i]) <span style="color:#f92672">*</span> q;
+            num <span style="color:#f92672">=</span> i;
+        }
+    }
+    length[t] <span style="color:#f92672">=</span> sum;
+    head[num]<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+    <span style="color:#66d9ef">return</span> sum;
+}
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printAns</span>()
+{
+    <span style="color:#66d9ef">int</span> i, j;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> m <span style="color:#f92672">/</span> T; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d </span><span style="color:#e6db74">&#34;</span>, length[i <span style="color:#f92672">*</span> T]);
+    }
+    printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+    <span style="color:#66d9ef">int</span> num <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> head[i]; j <span style="color:#f92672">&lt;</span> tail[i]; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>j) {
+            <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>) {
+                finLength[<span style="color:#f92672">+</span><span style="color:#f92672">+</span>num] <span style="color:#f92672">=</span> que[i][j] <span style="color:#f92672">+</span> m <span style="color:#f92672">*</span> q;
+            }
+            <span style="color:#66d9ef">else</span> {
+                finLength[<span style="color:#f92672">+</span><span style="color:#f92672">+</span>num] <span style="color:#f92672">=</span> que[i][j] <span style="color:#f92672">+</span> (m <span style="color:#f92672">-</span> j) <span style="color:#f92672">*</span> q;
+            }
+        }
+    }
+    sort(finLength <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, finLength <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> num, greater<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>());
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> (n <span style="color:#f92672">+</span> m) <span style="color:#f92672">/</span> T; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d </span><span style="color:#e6db74">&#34;</span>, finLength[T <span style="color:#f92672">*</span> i]);
+    }
+    printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1680,6 +1797,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1694,6 +1812,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1713,6 +1832,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2170,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" title="单调栈与单调队列"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="动态规划" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

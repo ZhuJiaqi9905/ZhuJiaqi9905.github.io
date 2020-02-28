@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>POJ2528 Mayor&#39;s poster :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/">
     <nav id="sidebar" class="">
 
 
@@ -1121,7 +1121,7 @@
   
     
     <li data-nav-id="/%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="线段树" class="dd-item 
-        
+        parent
         
         
         ">
@@ -1172,8 +1172,8 @@
   
     
     <li data-nav-id="/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/" title="POJ2528 Mayor&#39;s poster" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E7%BA%BF%E6%AE%B5%E6%A0%91/'>线段树</a> > POJ2528 Mayor's poster
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              POJ2528 Mayor&#39;s poster
             </h1>
           
 
@@ -1277,11 +1290,137 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="http://poj.org/problem?id=2528">POJ2528 Mayor&rsquo;s poster</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>用多张海报贴一面墙，求贴完后有几张海报是可见的（完全可见+部分可见）。</li>
+<li>题目有多组数据。</li>
+<li>对于每组数据有n个海报，每个海报给定左、右端点，并按照贴的顺序给出。</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>利用线段树，注意处理顺序是由外层到内层。因为外层覆盖的区间会影响内层的可见情况，而内层覆盖的区间不会影响外层的可见情况。</li>
+<li>注意延迟更新</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Node</span> {
+	<span style="color:#66d9ef">int</span> L, R;
+	<span style="color:#66d9ef">bool</span> covered;
+	<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">Mid</span>()
+	{
+		<span style="color:#66d9ef">return</span> L <span style="color:#f92672">+</span> (R <span style="color:#f92672">-</span> L) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+	}
+};
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Line</span> {
+	<span style="color:#66d9ef">int</span> s, e;
+};
+
+Line poster[<span style="color:#ae81ff">10010</span>];<span style="color:#75715e">//记录海报
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> disc[<span style="color:#ae81ff">40010</span>];<span style="color:#75715e">//用于离散化
+</span><span style="color:#75715e"></span>Node tree[<span style="color:#ae81ff">160010</span>];<span style="color:#75715e">//线段树
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> point[<span style="color:#ae81ff">40010</span>];<span style="color:#75715e">//记录海报的两个端点，用于离散化
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> point_num;<span style="color:#75715e">//记录去重后的端点个数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">build_tree</span>(<span style="color:#66d9ef">int</span> root, <span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r);
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">query_tree</span>(<span style="color:#66d9ef">int</span> root, <span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r);
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+	<span style="color:#66d9ef">int</span> c; <span style="color:#66d9ef">int</span> n;<span style="color:#75715e">//c个样例，n个海报
+</span><span style="color:#75715e"></span>	scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>c);
+	<span style="color:#66d9ef">int</span> ans; <span style="color:#66d9ef">int</span> i, j;
+	<span style="color:#66d9ef">while</span> (c<span style="color:#f92672">-</span><span style="color:#f92672">-</span>) {
+		ans <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+		scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n);
+		<span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+			scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>poster[i].s, <span style="color:#f92672">&amp;</span>poster[i].e);
+			point[<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> i] <span style="color:#f92672">=</span> poster[i].s;
+			point[<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> poster[i].e;
+		}
+		sort(point, point <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> n);
+		point_num <span style="color:#f92672">=</span> unique(point, point <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> n) <span style="color:#f92672">-</span> point;
+		<span style="color:#66d9ef">int</span> dcnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+		disc[dcnt] <span style="color:#f92672">=</span> point[<span style="color:#ae81ff">0</span>]; dcnt<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+		<span style="color:#75715e">//离散化，要把两个端点中间的区间也离散化成一个区间，
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">//因此如果(point[i]-point[i-1]&gt;1)，就把point[i-1]+1当一个新区间 
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">for</span>(i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> point_num; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+			<span style="color:#66d9ef">if</span>( (point[i] <span style="color:#f92672">-</span> point[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>){
+			disc[dcnt] <span style="color:#f92672">=</span> point[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>;	dcnt<span style="color:#f92672">+</span><span style="color:#f92672">+</span>; 
+			}
+			 disc[dcnt] <span style="color:#f92672">=</span> point[i]; dcnt<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+		}
+		
+		build_tree(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, dcnt);
+		<span style="color:#66d9ef">int</span> nl, nr;
+		
+		<span style="color:#66d9ef">for</span>(i <span style="color:#f92672">=</span> n <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#f92672">-</span><span style="color:#f92672">-</span>i){
+			nl <span style="color:#f92672">=</span> lower_bound(disc, disc <span style="color:#f92672">+</span> dcnt, poster[i].s) <span style="color:#f92672">-</span> disc <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+			nr <span style="color:#f92672">=</span> lower_bound(disc, disc <span style="color:#f92672">+</span> dcnt, poster[i].e) <span style="color:#f92672">-</span> disc <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+			
+			<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>query_tree(<span style="color:#ae81ff">1</span>, nl, nr) ){
+				ans<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+			}
+				
+		} 
+		printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, ans);
+	}
+}
+
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">build_tree</span>(<span style="color:#66d9ef">int</span> root, <span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+{
+	tree[root].L <span style="color:#f92672">=</span> l; tree[root].R <span style="color:#f92672">=</span> r;
+	tree[root].covered <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+	<span style="color:#66d9ef">if</span> (l <span style="color:#f92672">=</span><span style="color:#f92672">=</span> r)
+		<span style="color:#66d9ef">return</span>;
+	<span style="color:#66d9ef">int</span> mid <span style="color:#f92672">=</span> tree[root].Mid();
+	build_tree((root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>), l, mid);
+	build_tree((root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>, mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, r);
+	<span style="color:#66d9ef">return</span>;
+}
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">query_tree</span>(<span style="color:#66d9ef">int</span> root, <span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+{
+	<span style="color:#66d9ef">bool</span> flag <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+	<span style="color:#66d9ef">if</span> (tree[root].L <span style="color:#f92672">=</span><span style="color:#f92672">=</span> l <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> tree[root].R <span style="color:#f92672">=</span><span style="color:#f92672">=</span> r) {
+		flag <span style="color:#f92672">=</span> tree[root].covered;
+		tree[root].covered <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+		<span style="color:#66d9ef">return</span> flag;
+	}
+	<span style="color:#66d9ef">if</span>(tree[root].L <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> l <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> tree[root].R <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> r <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> tree[root].covered){
+		<span style="color:#75715e">//如果当前区间包裹了要查询的区间，且已经被覆盖了，就直接返回true,
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">//因为你第一个是延迟更新，你这里不判断，就跑到下面了 
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">//注意这里，错了两次了！！！ 
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+	}
+	<span style="color:#66d9ef">int</span> mid <span style="color:#f92672">=</span> tree[root].Mid();
+	<span style="color:#66d9ef">int</span> lc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>);
+	<span style="color:#66d9ef">int</span> rc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>;
+	<span style="color:#66d9ef">if</span> (r <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> mid) {
+		flag <span style="color:#f92672">=</span> query_tree(lc, l, r);
+	}
+	<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (l <span style="color:#f92672">&gt;</span> mid) {
+		flag <span style="color:#f92672">=</span> query_tree(rc, l, r);
+	}
+	<span style="color:#66d9ef">else</span> {
+		flag <span style="color:#f92672">=</span> query_tree(lc, l, mid) <span style="color:#f92672">&amp;</span> query_tree(rc, mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, r);
+	}
+	<span style="color:#75715e">//注意更新cover的状态
+</span><span style="color:#75715e"></span>	tree[root].covered <span style="color:#f92672">=</span> tree[lc].covered <span style="color:#f92672">&amp;</span> tree[rc].covered;
+	<span style="color:#66d9ef">return</span> flag;
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1994,6 +2133,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -2008,6 +2148,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2024,6 +2167,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -2048,8 +2192,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/" title="ZGOJ1561 区间抑或"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/" title="ZGOJ1561 区间抑或" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

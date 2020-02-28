@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>A Bug&#39;s Life :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%B9%B6%E6%9F%A5%E9%9B%86/a-bugs-life/">
     <nav id="sidebar" class="">
 
 
@@ -437,7 +437,7 @@
   
     
     <li data-nav-id="/%E5%B9%B6%E6%9F%A5%E9%9B%86/" title="并查集" class="dd-item 
-        
+        parent
         
         
         ">
@@ -464,8 +464,8 @@
   
     
     <li data-nav-id="/%E5%B9%B6%E6%9F%A5%E9%9B%86/a-bugs-life/" title="A Bug&#39;s Life" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/a-bugs-life/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%B9%B6%E6%9F%A5%E9%9B%86/'>并查集</a> > A Bug's Life
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              A Bug&#39;s Life
             </h1>
           
 
@@ -1277,11 +1290,93 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="http://poj.org/problem?id=2492">POJ2492 A Bug&rsquo;s Life</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>有两种性别的虫子。它们只能不同性别间交配。给出一堆虫子的交配列表。判断是否满足只能在不同性别间交配的命题。</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>利用带权并查集，把可以判断出性别关系的虫子放到同一集合中。</li>
+<li>在Merge()和GetRoot()函数中更新子结点与根节点的性别关系。</li>
+<li>性别关系类似于向量加减，可通过画向量图的方式计算结点间的关系。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> MAXN <span style="color:#f92672">=</span> <span style="color:#ae81ff">2010</span>;
+<span style="color:#66d9ef">int</span> par[MAXN];<span style="color:#75715e">//par[i]是i的根节点 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> rea[MAXN];<span style="color:#75715e">//rea[i]是i和根节点的关系,0是同性，1是异性 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">GetRoot</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> r); 
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Merge</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b, <span style="color:#66d9ef">int</span> r);
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">Query</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b);
+<span style="color:#66d9ef">int</span> n, m;<span style="color:#75715e">//n个虫子，m个操作 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+	<span style="color:#66d9ef">int</span> k;
+	scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>k);
+	<span style="color:#66d9ef">int</span> kase <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+	<span style="color:#66d9ef">while</span>(k<span style="color:#f92672">-</span><span style="color:#f92672">-</span>){
+		<span style="color:#f92672">+</span><span style="color:#f92672">+</span>kase;
+		<span style="color:#66d9ef">int</span> i, r, x, y;
+		<span style="color:#66d9ef">bool</span> flag <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+		scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n, <span style="color:#f92672">&amp;</span>m);
+		<span style="color:#66d9ef">for</span>(i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+			par[i] <span style="color:#f92672">=</span> i;
+			rea[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+		} 
+		<span style="color:#66d9ef">for</span>(i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;i <span style="color:#f92672">&lt;</span> m; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+			scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>x, <span style="color:#f92672">&amp;</span>y);
+			<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>Query(x, y)){
+				Merge(x, y, <span style="color:#ae81ff">1</span>);
+			}
+			<span style="color:#66d9ef">else</span>{
+				<span style="color:#66d9ef">if</span>(rea[x] <span style="color:#f92672">=</span><span style="color:#f92672">=</span> rea[y]){
+					flag <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+				}
+			}
+		}
+		printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Scenario #%d:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, kase);
+		<span style="color:#66d9ef">if</span>(flag) printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Suspicious bugs found!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+		<span style="color:#66d9ef">else</span> printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">No suspicious bugs found!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+		printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+	}
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">GetRoot</span>(<span style="color:#66d9ef">int</span> a)
+{
+	<span style="color:#66d9ef">if</span>(par[a] <span style="color:#f92672">=</span><span style="color:#f92672">=</span> a)
+		<span style="color:#66d9ef">return</span> a;
+	<span style="color:#66d9ef">int</span> pa <span style="color:#f92672">=</span> GetRoot(par[a]);
+	rea[a] <span style="color:#f92672">=</span> (rea[par[a]] <span style="color:#f92672">+</span> rea[a])<span style="color:#f92672">%</span><span style="color:#ae81ff">2</span>;
+	par[a] <span style="color:#f92672">=</span> pa;
+	<span style="color:#66d9ef">return</span> pa;
+}
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Merge</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b, <span style="color:#66d9ef">int</span> r)
+{
+	<span style="color:#66d9ef">int</span> pa <span style="color:#f92672">=</span> GetRoot(a);
+	<span style="color:#66d9ef">int</span> pb <span style="color:#f92672">=</span> GetRoot(b);
+	<span style="color:#66d9ef">if</span>(pa <span style="color:#f92672">!</span><span style="color:#f92672">=</span> pb){
+		par[pb] <span style="color:#f92672">=</span> pa;
+		rea[pb] <span style="color:#f92672">=</span> (rea[a] <span style="color:#f92672">-</span> r <span style="color:#f92672">-</span> rea[b] <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span>;
+	}
+	<span style="color:#66d9ef">return</span> ;
+}
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">Query</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b)
+{
+	<span style="color:#66d9ef">return</span> GetRoot(a) <span style="color:#f92672">=</span><span style="color:#f92672">=</span> GetRoot(b);
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1566,6 +1661,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1580,6 +1676,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1596,6 +1693,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2148,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/" title="并查集"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/cube-stacking/" title="Cube stacking" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

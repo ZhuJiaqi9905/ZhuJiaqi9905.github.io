@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>Best Cow Line :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E8%B4%AA%E5%BF%83/best-cow-line/">
     <nav id="sidebar" class="">
 
 
@@ -146,7 +146,7 @@
   
     
     <li data-nav-id="/%E8%B4%AA%E5%BF%83/" title="贪心" class="dd-item 
-        
+        parent
         
         
         ">
@@ -246,7 +246,7 @@
  
   
     
-      <li data-nav-id="/%E8%B4%AA%E5%BF%83/best-cow-line/" title="Best Cow Line" class="dd-item ">
+      <li data-nav-id="/%E8%B4%AA%E5%BF%83/best-cow-line/" title="Best Cow Line" class="dd-item active">
         <a href="/%E8%B4%AA%E5%BF%83/best-cow-line/">
         Best Cow Line
         
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E8%B4%AA%E5%BF%83/'>贪心</a> > Best Cow Line
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              Best Cow Line
             </h1>
           
 
@@ -1276,17 +1289,80 @@
 
 
 
-
-
-
+<h2 id="题目链接">题目链接</h2>
+<p><a href="http://poj.org/problem?id=3617">POJ3617 Best Cow Line</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>奶牛题，抽象出来就是，给定长度为N的字符串S，要构造出一个长度N的字符串T。构造方式是：从S的头部或尾部删除一个字符，加到T的尾部</li>
+<li>求字典序最小的T，每次输出80个字符后换行</li>
 </ul>
-
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>贪心，每次比较剩余的S串的头尾，选小的加入T的尾部。</li>
+<li>要注意到头尾相同的情况，这是要接着往里比较，因为我们希望尽可能早使用更小的字符。</li>
+<li>可以用a,b初始时指向S串的头尾，然后不断往里缩。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> N;
+<span style="color:#66d9ef">char</span> s[<span style="color:#ae81ff">10010</span>];
+<span style="color:#66d9ef">char</span> t[<span style="color:#ae81ff">10010</span>];
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>N);
+    getchar();
+    <span style="color:#66d9ef">int</span> i;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%c</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>s[i]);
+        getchar();
+    }
+    <span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">int</span> b <span style="color:#f92672">=</span> N <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#75715e">//指向初始s的头尾，往里缩
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">while</span> (a <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> b) {
+        <span style="color:#66d9ef">bool</span> left <span style="color:#f92672">=</span> false;
+        <span style="color:#75715e">//如果头尾相同，就不断往里找
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; a <span style="color:#f92672">+</span> i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> b; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            <span style="color:#66d9ef">if</span> (s[a <span style="color:#f92672">+</span> i] <span style="color:#f92672">&lt;</span> s[b <span style="color:#f92672">-</span> i]) {
+                left <span style="color:#f92672">=</span> true;
+                <span style="color:#66d9ef">break</span>;
+            }
+            <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (s[a <span style="color:#f92672">+</span> i] <span style="color:#f92672">&gt;</span> s[b <span style="color:#f92672">-</span> i]) {
+                left <span style="color:#f92672">=</span> false;
+                <span style="color:#66d9ef">break</span>;
+            }
+        }
+        <span style="color:#66d9ef">if</span> (left) {
+            t[j] <span style="color:#f92672">=</span> s[a]; a<span style="color:#f92672">+</span><span style="color:#f92672">+</span>; j<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+        }
+        <span style="color:#66d9ef">else</span> {
+            t[j] <span style="color:#f92672">=</span> s[b]; b<span style="color:#f92672">-</span><span style="color:#f92672">-</span>; j<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+        }
+    }
+    t[N] <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">\0</span><span style="color:#e6db74">&#39;</span>;
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+       
+        <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">%</span> <span style="color:#ae81ff">80</span> <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> i <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>) {
+            printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        }
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%c</span><span style="color:#e6db74">&#34;</span>, t[i]);
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div>
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1370,6 +1446,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1382,6 +1459,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1447,6 +1527,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1465,6 +1546,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2132,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E8%B4%AA%E5%BF%83/stall-reservations/" title="Stall Reservations"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E5%85%B6%E5%AE%83%E8%A7%A3%E6%B3%95/" title="其它解法" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -2079,3 +2165,4 @@
 
   </body>
 </html>
+

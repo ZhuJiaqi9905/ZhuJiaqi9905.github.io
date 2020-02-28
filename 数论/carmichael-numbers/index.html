@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>Carmichael Numbers :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E6%95%B0%E8%AE%BA/carmichael-numbers/">
     <nav id="sidebar" class="">
 
 
@@ -943,7 +943,7 @@
   
     
     <li data-nav-id="/%E6%95%B0%E8%AE%BA/" title="数论" class="dd-item 
-        
+        parent
         
         
         ">
@@ -994,8 +994,8 @@
   
     
     <li data-nav-id="/%E6%95%B0%E8%AE%BA/carmichael-numbers/" title="Carmichael Numbers" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E6%95%B0%E8%AE%BA/carmichael-numbers/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E6%95%B0%E8%AE%BA/'>数论</a> > Carmichael Numbers
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              Carmichael Numbers
             </h1>
           
 
@@ -1277,11 +1290,85 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="https://www.luogu.com.cn/problem/UVA10006">Carmichael Numbers</a></p>
+<h2 id="题目描述">题目描述</h2>
+<p>如果对任意的 1 &lt; x &lt; n 都有 x^n≡x(mod n)成立的合数n称为Carmichael Numbers。给出一些整数n,请判断是否为Carmichael Numbers，其中2 &lt; n &lt; 65000</p>
+<h2 id="解题思路">解题思路</h2>
 <ul>
-	
+<li>首先判断n是否为合数</li>
+<li>利用快速幂计算x^n</li>
 </ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">long</span> <span style="color:#66d9ef">long</span> ll;
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">判断是否为质数
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">is_primer</span>(<span style="color:#66d9ef">int</span> n)
+{
+    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i<span style="color:#f92672">*</span>i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+        <span style="color:#66d9ef">if</span>(n <span style="color:#f92672">%</span>i <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>)
+            <span style="color:#66d9ef">return</span> false;
+    }
+    <span style="color:#66d9ef">return</span> true;
+}
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">快速幂
+</span><span style="color:#75715e">*/</span>
+ll <span style="color:#a6e22e">mod_pow</span>(ll x, ll n, ll mod)
+{
+    ll res <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">while</span>(n <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>){
+        <span style="color:#66d9ef">if</span>(n <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">1</span>){
+            res <span style="color:#f92672">=</span> res <span style="color:#f92672">*</span> x <span style="color:#f92672">%</span> mod;
+        }
+        x <span style="color:#f92672">=</span> x <span style="color:#f92672">*</span> x <span style="color:#f92672">%</span> mod;
+        n <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    }
+    <span style="color:#66d9ef">return</span> res;
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    ll n; <span style="color:#66d9ef">bool</span> flag <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    ll ans; 
+    <span style="color:#66d9ef">while</span>(<span style="color:#ae81ff">1</span>){
+        flag <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%lld</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n);
+        <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>n)  <span style="color:#66d9ef">break</span>;
+        <span style="color:#75715e">//如果n是质数
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span>(is_primer((<span style="color:#66d9ef">int</span>)n)){
+            printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%lld is normal.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, n);
+        }
+        <span style="color:#66d9ef">else</span>{
+            <span style="color:#66d9ef">for</span>(ll x <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; x <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>x){
+            	ans <span style="color:#f92672">=</span> mod_pow(x, n, n);
+                <span style="color:#66d9ef">if</span>(ans <span style="color:#f92672">!</span><span style="color:#f92672">=</span> x){
+                    flag <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">break</span>;
+                }
+            }
+            <span style="color:#66d9ef">if</span>(flag)
+                printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">The number %lld is a Carmichael number.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, n);
+            <span style="color:#66d9ef">else</span>
+                printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%lld is normal.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, n);
+        }
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1880,6 +1967,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1894,6 +1982,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1911,6 +2002,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1926,6 +2018,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2143,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E6%95%B0%E8%AE%BA/%E5%8C%BA%E9%97%B4%E7%AD%9B%E6%B3%95/" title="区间筛法"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E6%95%B0%E8%AE%BA/%E5%9F%83%E5%BC%8F%E7%AD%9B%E6%B3%95/" title="埃式筛法" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

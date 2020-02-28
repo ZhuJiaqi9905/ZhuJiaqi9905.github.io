@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>双六 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E6%95%B0%E8%AE%BA/%E5%8F%8C%E5%85%AD/">
     <nav id="sidebar" class="">
 
 
@@ -943,7 +943,7 @@
   
     
     <li data-nav-id="/%E6%95%B0%E8%AE%BA/" title="数论" class="dd-item 
-        
+        parent
         
         
         ">
@@ -1066,8 +1066,8 @@
   
     
     <li data-nav-id="/%E6%95%B0%E8%AE%BA/%E5%8F%8C%E5%85%AD/" title="双六" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E6%95%B0%E8%AE%BA/%E5%8F%8C%E5%85%AD/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E6%95%B0%E8%AE%BA/'>数论</a> > 双六
+          
+         
           
          
           
@@ -1252,7 +1258,13 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1280,7 @@
           
             <h1>
               
-              Categories
+              双六
             </h1>
           
 
@@ -1277,11 +1289,73 @@
 
 
 
-
-
+	<h2 id="题目描述">题目描述</h2>
+<p>一个双六上面有向前向后无线延续的格子，每个格子都写有整数。其中0号是起点，1号是终点。输入整数a和b，一个骰子只有a,b,-a,-b四个
+整数。问抛出四个数多少次可到达终点？如果解不唯一，输出一组即可。如果无解，输出-1。</p>
+<h2 id="解题思路">解题思路</h2>
 <ul>
-	
+<li>即求整数x,y使得ax+by=1。</li>
+<li>有解条件为gcd(a, b)=1。</li>
+<li>利用扩展的欧几里得算法可求解。</li>
 </ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">扩展欧几里得算法，在求gcd(a, b)的同时，
+</span><span style="color:#75715e">求出一对(x, y)满足a*x + b*y = gcd(a, b) 
+</span><span style="color:#75715e">*/</span> 
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">extgcd</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b, <span style="color:#66d9ef">int</span><span style="color:#f92672">&amp;</span> x, <span style="color:#66d9ef">int</span><span style="color:#f92672">&amp;</span> y)
+{
+    <span style="color:#66d9ef">int</span> d <span style="color:#f92672">=</span> a;
+    <span style="color:#66d9ef">if</span>(b <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>){
+        d <span style="color:#f92672">=</span> extgcd(b, a<span style="color:#f92672">%</span>b, y, x);
+        y <span style="color:#f92672">-</span><span style="color:#f92672">=</span> (a<span style="color:#f92672">/</span>b) <span style="color:#f92672">*</span> x;
+    }
+    <span style="color:#66d9ef">else</span>{
+        x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        y <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    }
+    <span style="color:#66d9ef">return</span> d;
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    <span style="color:#66d9ef">int</span> a, b;
+    <span style="color:#66d9ef">int</span> x, y;
+    <span style="color:#66d9ef">int</span> n1, n2, n3, n4; <span style="color:#75715e">// 对应a, b, -a, -b的个数
+</span><span style="color:#75715e"></span>    scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a, <span style="color:#f92672">&amp;</span>b);
+    <span style="color:#66d9ef">int</span> d;
+    d <span style="color:#f92672">=</span> extgcd(a, b, x, y);
+    <span style="color:#66d9ef">if</span>(d <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>){
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-1</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+    }
+    
+    <span style="color:#66d9ef">else</span>{
+        n1 <span style="color:#f92672">=</span> n2 <span style="color:#f92672">=</span> n3 <span style="color:#f92672">=</span> n4 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; 
+        <span style="color:#66d9ef">if</span>(x <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+            n1 <span style="color:#f92672">=</span> x;
+        <span style="color:#66d9ef">else</span>    
+            n3 <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>x;
+        <span style="color:#66d9ef">if</span>(y <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)   
+            n2 <span style="color:#f92672">=</span> y;
+        <span style="color:#66d9ef">else</span>
+            n4 <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>y;
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d%d%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, n1, n2, n3, n4);
+    }
+}
+
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1880,6 +1954,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1894,6 +1969,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1959,6 +2037,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1974,6 +2053,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2130,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/" title="素数判定"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/" title="线段上的格点数" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

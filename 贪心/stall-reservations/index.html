@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>Stall Reservations :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E8%B4%AA%E5%BF%83/stall-reservations/">
     <nav id="sidebar" class="">
 
 
@@ -146,7 +146,7 @@
   
     
     <li data-nav-id="/%E8%B4%AA%E5%BF%83/" title="贪心" class="dd-item 
-        
+        parent
         
         
         ">
@@ -227,7 +227,7 @@
  
   
     
-      <li data-nav-id="/%E8%B4%AA%E5%BF%83/stall-reservations/" title="Stall Reservations" class="dd-item ">
+      <li data-nav-id="/%E8%B4%AA%E5%BF%83/stall-reservations/" title="Stall Reservations" class="dd-item active">
         <a href="/%E8%B4%AA%E5%BF%83/stall-reservations/">
         Stall Reservations
         
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E8%B4%AA%E5%BF%83/'>贪心</a> > Stall Reservations
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              Stall Reservations
             </h1>
           
 
@@ -1276,17 +1289,99 @@
 
 
 
-
-
-
+<h2 id="题目链接">题目链接</h2>
+<p><a href="http://poj.org/problem?id=3190">POJ3190 Stall Reservations</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>有n头牛挤奶，已知每头牛挤奶的开始时间和结束时间。每个牛都要在一个畜栏中挤奶，一个畜栏同一时间只能放一头牛。哪怕挤奶时间的区间端点重合也不行。</li>
+<li>问至少需要多少畜栏，每头牛都放在哪个畜栏里。</li>
 </ul>
-
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>贪心</li>
+<li>首先将奶牛按挤奶的开始时间排序。</li>
+<li>为第一个奶牛分配畜栏。</li>
+<li>依次处理后面的每一个奶牛i。在处理i时，考虑已分配的畜栏中，结束时间最早的畜栏x。
+<ul>
+<li>如果End(x)&lt;Start(i), 则不分配新畜栏。</li>
+<li>如果End(x)&gt;=Start(i),则分配新畜栏。</li>
+</ul>
+</li>
+<li>用优先队列维护已经分配的畜栏。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> n;
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Cow</span> {
+    <span style="color:#66d9ef">int</span> a, b;<span style="color:#75715e">//挤奶区间起始点
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> No;<span style="color:#75715e">//编号
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">bool</span> <span style="color:#66d9ef">operator</span> <span style="color:#f92672">&lt;</span>(<span style="color:#66d9ef">const</span> Cow<span style="color:#f92672">&amp;</span> c)<span style="color:#66d9ef">const</span> {
+        <span style="color:#66d9ef">return</span> a <span style="color:#f92672">&lt;</span> c.a;
+    }
+};
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Stall</span> {
+    <span style="color:#66d9ef">int</span> end;<span style="color:#75715e">//结束时间
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> No;<span style="color:#75715e">//畜栏编号
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">bool</span> <span style="color:#66d9ef">operator</span> <span style="color:#f92672">&lt;</span>(<span style="color:#66d9ef">const</span> Stall<span style="color:#f92672">&amp;</span> s) <span style="color:#66d9ef">const</span> {
+        <span style="color:#66d9ef">return</span> end <span style="color:#f92672">&gt;</span> s.end;
+    }
+    Stall(<span style="color:#66d9ef">int</span> e, <span style="color:#66d9ef">int</span> n) <span style="color:#f92672">:</span>end(e), No(n) {}
+};
+Cow cows[<span style="color:#ae81ff">50010</span>];
+<span style="color:#66d9ef">int</span> pos[<span style="color:#ae81ff">50010</span>];<span style="color:#75715e">//pos[i]为第i个奶牛的畜栏编号
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n);
+    <span style="color:#66d9ef">int</span> i, j;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>cows[i].a, <span style="color:#f92672">&amp;</span>cows[i].b);
+        cows[i].No <span style="color:#f92672">=</span> i;
+    }
+    sort(cows, cows <span style="color:#f92672">+</span> n);
+    priority_queue<span style="color:#f92672">&lt;</span>Stall<span style="color:#f92672">&gt;</span> pq;
+    <span style="color:#66d9ef">int</span> total <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        <span style="color:#66d9ef">if</span> (pq.empty()) {
+            total<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+            pq.push(Stall(cows[i].b, total));
+            pos[cows[i].No] <span style="color:#f92672">=</span> total;
+        }
+        <span style="color:#66d9ef">else</span> {
+            Stall st <span style="color:#f92672">=</span> pq.top();
+            <span style="color:#66d9ef">if</span> (st.end <span style="color:#f92672">&lt;</span> cows[i].a) {
+                pq.pop();
+                st.end <span style="color:#f92672">=</span> cows[i].b;
+                pos[cows[i].No] <span style="color:#f92672">=</span> st.No;
+                pq.push(st);
+            }
+            <span style="color:#66d9ef">else</span> {
+                <span style="color:#f92672">+</span><span style="color:#f92672">+</span>total;
+                pq.push(Stall(cows[i].b, total));
+                pos[cows[i].No] <span style="color:#f92672">=</span> total;
+            }
+        }
+    }
+    printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, total);
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, pos[i]);
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div>
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1370,6 +1465,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1382,6 +1478,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1431,6 +1530,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1446,6 +1546,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2151,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E8%B4%AA%E5%BF%83/%E7%94%B5%E5%BD%B1%E8%8A%82/" title="电影节"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E8%B4%AA%E5%BF%83/best-cow-line/" title="Best Cow Line" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -2079,3 +2184,4 @@
 
   </body>
 </html>
+

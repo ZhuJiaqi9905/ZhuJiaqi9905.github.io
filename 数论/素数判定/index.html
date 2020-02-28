@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>素数判定 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/">
     <nav id="sidebar" class="">
 
 
@@ -943,7 +943,7 @@
   
     
     <li data-nav-id="/%E6%95%B0%E8%AE%BA/" title="数论" class="dd-item 
-        
+        parent
         
         
         ">
@@ -1042,8 +1042,8 @@
   
     
     <li data-nav-id="/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/" title="素数判定" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E6%95%B0%E8%AE%BA/'>数论</a> > 素数判定
+          
+         
           
          
           
@@ -1252,7 +1258,13 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1280,7 @@
           
             <h1>
               
-              Categories
+              素数判定
             </h1>
           
 
@@ -1277,11 +1289,75 @@
 
 
 
-
-
+	<h2 id="题目描述">题目描述</h2>
+<p>给定数n，判断n是否为素数；求n的约数；求n的整数分解形式</p>
+<h2 id="解题思路">解题思路</h2>
 <ul>
-	
+<li>枚举n可能的约数</li>
 </ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;map&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">素数测试判断素数
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isPrime1</span>(<span style="color:#66d9ef">int</span> n)
+{
+    <span style="color:#66d9ef">if</span>(n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">return</span> false;
+    <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> sqrt(n);
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> k; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+        <span style="color:#66d9ef">if</span>(n <span style="color:#f92672">%</span> i <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>)
+            <span style="color:#66d9ef">return</span> false;    
+    }
+    <span style="color:#66d9ef">return</span> true;
+}
+
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">约数枚举
+</span><span style="color:#75715e">*/</span>
+vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> divisor(<span style="color:#66d9ef">int</span> n)
+{
+    vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> res;
+    <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> sqrt(n);
+    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> k; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+        <span style="color:#66d9ef">if</span>(n <span style="color:#f92672">%</span> i <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>){
+            res.push_back(i);
+            <span style="color:#66d9ef">if</span>(i <span style="color:#f92672">!</span><span style="color:#f92672">=</span> n<span style="color:#f92672">/</span>i)
+                res.push_back(n<span style="color:#f92672">/</span>i);
+        }
+    }
+    <span style="color:#66d9ef">return</span> res;
+}
+
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">整数分解
+</span><span style="color:#75715e">*/</span>
+map<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> prime_factor(<span style="color:#66d9ef">int</span> n){
+    map<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> res; <span style="color:#75715e">//记录n的每个约数及该约数的个数
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//由于整数分解时n是变的，因此用i*i &lt;= n判断
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i <span style="color:#f92672">*</span> i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+        <span style="color:#66d9ef">while</span>(n <span style="color:#f92672">%</span> i <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>){
+            <span style="color:#f92672">+</span><span style="color:#f92672">+</span>res[i];
+            n <span style="color:#f92672">/</span><span style="color:#f92672">=</span> i;
+        }
+    }
+    <span style="color:#66d9ef">if</span>(n <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>) res[n] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">return</span> res;
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1880,6 +1956,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1894,6 +1971,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1943,6 +2023,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1958,6 +2039,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2132,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E6%95%B0%E8%AE%BA/%E5%9F%83%E5%BC%8F%E7%AD%9B%E6%B3%95/" title="埃式筛法"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E6%95%B0%E8%AE%BA/%E5%8F%8C%E5%85%AD/" title="双六" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

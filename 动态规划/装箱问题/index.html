@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>装箱问题 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%A3%85%E7%AE%B1%E9%97%AE%E9%A2%98/">
     <nav id="sidebar" class="">
 
 
@@ -673,7 +673,7 @@
   
     
     <li data-nav-id="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="动态规划" class="dd-item 
-        
+        parent
         
         
         ">
@@ -748,8 +748,8 @@
   
     
     <li data-nav-id="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%A3%85%E7%AE%B1%E9%97%AE%E9%A2%98/" title="装箱问题" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%A3%85%E7%AE%B1%E9%97%AE%E9%A2%98/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/'>动态规划</a> > 装箱问题
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              装箱问题
             </h1>
           
 
@@ -1277,11 +1290,60 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="https://www.luogu.com.cn/problem/P1049">装箱问题</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>有一个箱子容量为V，同时有n个物品，每个物品有一个体积（正整数）。要求n个物品中，任取若干个装入箱内，使箱子的剩余空间为最小。</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>可转化为01背包问题。即求如何装，使箱子占有空间最大，总空间减去最大占有空间，即为最小剩余空间。此题可看成物品的价值等于物品体积。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> w[<span style="color:#ae81ff">40</span>];<span style="color:#75715e">//存体积，也相当于价值
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> dp[<span style="color:#ae81ff">20010</span>];<span style="color:#75715e">//滚动数组，dp[i][j]计算前i个物品，体积j的背包，装的最大占有空间。其中i被省略。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> V;<span style="color:#75715e">//容量
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> n;<span style="color:#75715e">//n个物品
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>V);
+    scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n);
+    <span style="color:#66d9ef">int</span> i; <span style="color:#66d9ef">int</span> j;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>w[i]);
+    }
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> w[<span style="color:#ae81ff">1</span>]; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> V; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        dp[i] <span style="color:#f92672">=</span> w[<span style="color:#ae81ff">1</span>];
+    }
+    <span style="color:#75715e">//滚动数组dp
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> V; j <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> w[i]; <span style="color:#f92672">-</span><span style="color:#f92672">-</span>j) {
+            dp[j] <span style="color:#f92672">=</span> max(dp[j], dp[j <span style="color:#f92672">-</span> w[i]] <span style="color:#f92672">+</span> w[i]);
+        }
+    }
+    <span style="color:#66d9ef">int</span> ans <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> V; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        ans <span style="color:#f92672">=</span> max(dp[i], ans);
+    }
+    ans <span style="color:#f92672">=</span> V <span style="color:#f92672">-</span> ans;
+    printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, ans);
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1714,6 +1776,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1728,6 +1791,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1761,6 +1827,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1776,6 +1843,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2118,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/" title="最长公共子序列"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E9%87%87%E8%8D%AF/" title="采药" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>全排列 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E6%90%9C%E7%B4%A2/%E5%85%A8%E6%8E%92%E5%88%97/">
     <nav id="sidebar" class="">
 
 
@@ -331,7 +331,7 @@
   
     
     <li data-nav-id="/%E6%90%9C%E7%B4%A2/" title="搜索" class="dd-item 
-        
+        parent
         
         
         ">
@@ -358,8 +358,8 @@
   
     
     <li data-nav-id="/%E6%90%9C%E7%B4%A2/%E5%85%A8%E6%8E%92%E5%88%97/" title="全排列" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E6%90%9C%E7%B4%A2/%E5%85%A8%E6%8E%92%E5%88%97/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E6%90%9C%E7%B4%A2/'>搜索</a> > 全排列
+          
+         
           
          
           
@@ -1252,7 +1258,13 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1280,7 @@
           
             <h1>
               
-              Categories
+              全排列
             </h1>
           
 
@@ -1277,11 +1289,86 @@
 
 
 
-
-
+	<h2 id="题目描述">题目描述</h2>
+<p>求1~n的全排列</p>
+<h2 id="解题思路">解题思路</h2>
 <ul>
-	
+<li>用dfs枚举全排列</li>
 </ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+
+<span style="color:#66d9ef">int</span> result[<span style="color:#ae81ff">200</span>];
+<span style="color:#66d9ef">int</span> N;
+<span style="color:#66d9ef">int</span> used[<span style="color:#ae81ff">200</span>];
+<span style="color:#75715e">/*用dfs生成全排列*/</span>
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">permutation1</span>(<span style="color:#66d9ef">int</span> k);
+
+<span style="color:#75715e">/*优化后的全排列生成,但不是按顺序生成的，
+</span><span style="color:#75715e">思路：
+</span><span style="color:#75715e">求 S = {a1,a2,a3..an}的全排列，等于:
+</span><span style="color:#75715e">for (int i = 1; i &lt;= n; ++i ) {
+</span><span style="color:#75715e">    for x in (S – ai) 的每个排列
+</span><span style="color:#75715e">        cout &lt;&lt; ai + x;
+</span><span style="color:#75715e">}
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">template</span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">T</span><span style="color:#f92672">&gt;</span>
+<span style="color:#66d9ef">void</span> permutation2(T start, T end, T k)
+{
+    <span style="color:#75715e">//输出[start,k)固定的全排列
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (k <span style="color:#f92672">=</span><span style="color:#f92672">=</span> end) {
+        <span style="color:#66d9ef">for</span> (start; start <span style="color:#f92672">!</span><span style="color:#f92672">=</span> end; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>start) {
+            cout <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#f92672">*</span>start <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#34;</span>;
+        }
+        cout <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> endl;
+        <span style="color:#66d9ef">return</span>;
+    }
+    <span style="color:#66d9ef">for</span> (T i <span style="color:#f92672">=</span> k; i <span style="color:#f92672">!</span><span style="color:#f92672">=</span> end; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        swap(<span style="color:#f92672">*</span>k, <span style="color:#f92672">*</span>i);
+        permutation2(start, end, k <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+        swap(<span style="color:#f92672">*</span>k, <span style="color:#f92672">*</span>i);
+    }
+}
+<span style="color:#66d9ef">int</span> a[<span style="color:#ae81ff">200</span>];
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    cin <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> N;
+    permutation1(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        a[i] <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+    }
+    permutation2(a, a <span style="color:#f92672">+</span> N, a);
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">permutation1</span>(<span style="color:#66d9ef">int</span> k)
+{
+    <span style="color:#66d9ef">if</span> (k <span style="color:#f92672">=</span><span style="color:#f92672">=</span> N) {
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            cout <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> result[i] <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#34;</span>;
+        }
+        cout <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> endl;
+        <span style="color:#66d9ef">return</span>;
+    }
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> N; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>used[i]) {
+            result[k] <span style="color:#f92672">=</span> i;
+            used[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+            permutation1(k <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+            used[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        }
+    }
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1500,6 +1587,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1514,6 +1602,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1530,6 +1619,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2140,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E6%90%9C%E7%B4%A2/" title="搜索"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E6%90%9C%E7%B4%A2/lake-counting/" title="Lake Counting" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

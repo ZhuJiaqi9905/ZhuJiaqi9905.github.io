@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>Ants :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%85%B6%E5%AE%83%E8%A7%A3%E6%B3%95/ants/">
     <nav id="sidebar" class="">
 
 
@@ -273,7 +273,7 @@
   
     
     <li data-nav-id="/%E5%85%B6%E5%AE%83%E8%A7%A3%E6%B3%95/" title="其它解法" class="dd-item 
-        
+        parent
         
         
         ">
@@ -300,8 +300,8 @@
   
     
     <li data-nav-id="/%E5%85%B6%E5%AE%83%E8%A7%A3%E6%B3%95/ants/" title="Ants" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%85%B6%E5%AE%83%E8%A7%A3%E6%B3%95/ants/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%85%B6%E5%AE%83%E8%A7%A3%E6%B3%95/'>其它解法</a> > Ants
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              Ants
             </h1>
           
 
@@ -1277,11 +1290,56 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="http://poj.org/problem?id=1852">POJ1852 Ants</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>有一个长为L的杆子，上面有n个蚂蚁。每个蚂蚁的初始位置给定。蚂蚁以单位速度在杆子上走，如果两个蚂蚁碰到，就各自反向走。</li>
+<li>求所有蚂蚁落下杆子所需的最短时间和最长时间</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>发现两个蚂蚁相遇后，让它们保持原样交错而过、继续前进对本题的解没有影响</li>
+<li>因此最短时间和最长时间，都只要对每一只蚂蚁检查一次即可</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> L;<span style="color:#75715e">//杆子长度
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> n;
+<span style="color:#66d9ef">int</span> a[<span style="color:#ae81ff">1000010</span>];
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    <span style="color:#66d9ef">int</span> t; scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>t);
+    <span style="color:#66d9ef">while</span> (t<span style="color:#f92672">-</span><span style="color:#f92672">-</span>) {
+        scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>L, <span style="color:#f92672">&amp;</span>n);
+        <span style="color:#66d9ef">int</span> i;
+        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a[i]);
+        }
+        <span style="color:#66d9ef">int</span> minT <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">int</span> maxT <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#75715e">//计算所有蚂蚁落下的最短时间
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            minT <span style="color:#f92672">=</span> max(minT, min(a[i], L <span style="color:#f92672">-</span> a[i]));
+        }
+        <span style="color:#75715e">//计算最长时间
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+            maxT <span style="color:#f92672">=</span> max(maxT, max(a[i], L <span style="color:#f92672">-</span> a[i]));
+        }
+        printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, minT, maxT);
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1466,6 +1524,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1480,6 +1539,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1499,6 +1559,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2111,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%85%B6%E5%AE%83%E8%A7%A3%E6%B3%95/" title="其它解法"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E6%90%9C%E7%B4%A2/" title="搜索" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

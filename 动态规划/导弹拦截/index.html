@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>导弹拦截 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%AF%BC%E5%BC%B9%E6%8B%A6%E6%88%AA/">
     <nav id="sidebar" class="">
 
 
@@ -673,7 +673,7 @@
   
     
     <li data-nav-id="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="动态规划" class="dd-item 
-        
+        parent
         
         
         ">
@@ -700,8 +700,8 @@
   
     
     <li data-nav-id="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%AF%BC%E5%BC%B9%E6%8B%A6%E6%88%AA/" title="导弹拦截" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%AF%BC%E5%BC%B9%E6%8B%A6%E6%88%AA/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/'>动态规划</a> > 导弹拦截
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              导弹拦截
             </h1>
           
 
@@ -1277,11 +1290,140 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="https://www.luogu.com.cn/problem/P1020">导弹拦截</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>求最长不上升子序列长度和最长上升子序列长度</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>以最长上升子序列为例，传统方法是O(n^2)的，但是可以优化成O(nlog(n))。</li>
+<li>首先，做法是两重循环，第一重循环枚举x，这个复杂度无法省掉。第二重循环是找出在x之前，a值大于a[x]的最大dp值。</li>
+<li>第二重循环可以通过二分枚举dp值来实现。</li>
+<li>需要维护一个数组r[],r[i]是在已经走过的这些元素中，长度为i的LIS最小以什么数结尾。那么，满足r[mid]&lt;a[x]的mid值，都是候选解。
+利用二分枚举求出其中最大的即可。</li>
+<li>需要维护数组r[],在求出dp[x]之后，把r[dp[x]]设成min(r[dp[x]],a[x])即可。</li>
+<li>可以使用upper_bound()函数，但是这里为了训练手写二分枚举，就没用板子。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> a[<span style="color:#ae81ff">100010</span>];<span style="color:#75715e">//导弹的高度
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> dp1[<span style="color:#ae81ff">100010</span>];<span style="color:#75715e">//dp1[i]是从第1~第i个以第i结尾的最长不上升子序列长度。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> r1[<span style="color:#ae81ff">100010</span>];<span style="color:#75715e">//在已经走过的这些元素中，长度为i的最长不上升子序列长度最大以什么数结尾。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> dp2[<span style="color:#ae81ff">100010</span>];<span style="color:#75715e">//dp2[i]是从第1~第i个以第i结尾的最长上升子序列长度。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> r2[<span style="color:#ae81ff">100010</span>];<span style="color:#75715e">//在已经走过的这些元素中，长度为i的LIS最小以什么数结尾。
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> n;
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bin_check1</span>(<span style="color:#66d9ef">int</span> x);
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bin_check2</span>(<span style="color:#66d9ef">int</span> x);
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    <span style="color:#66d9ef">int</span> i, j;
+    n <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">while</span> (scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a[n]) <span style="color:#f92672">!</span><span style="color:#f92672">=</span> EOF) {
+        n<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+    }
+    n<span style="color:#f92672">-</span><span style="color:#f92672">-</span>;
+    dp1[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    r1[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> a[<span style="color:#ae81ff">1</span>];
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        bin_check1(i);
+    }
+    <span style="color:#66d9ef">int</span> ans1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        ans1 <span style="color:#f92672">=</span> max(ans1, dp1[i]);
+    }
+    dp2[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    r2[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> a[<span style="color:#ae81ff">1</span>];
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        bin_check2(i);
+    }
+    <span style="color:#66d9ef">int</span> ans2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        ans2 <span style="color:#f92672">=</span> max(ans2, dp2[i]);
+    }
+    printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, ans1);
+    printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, ans2);
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">二分猜测答案
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bin_check1</span>(<span style="color:#66d9ef">int</span> x)
+{
+    <span style="color:#66d9ef">int</span> left <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">int</span> right <span style="color:#f92672">=</span> x <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">int</span> ans <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">int</span> mid;
+    <span style="color:#75715e">//二分枚举dp1[x]的可能解
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">while</span> (left <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> right) {
+        <span style="color:#75715e">//猜测一个dp1值为mid
+</span><span style="color:#75715e"></span>        mid <span style="color:#f92672">=</span> (left <span style="color:#f92672">+</span> right) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+        <span style="color:#66d9ef">if</span> (r1[mid] <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> r1[mid] <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> a[x]) {
+            ans <span style="color:#f92672">=</span> mid;
+            left <span style="color:#f92672">=</span> mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+        }
+        <span style="color:#66d9ef">else</span> {
+            right <span style="color:#f92672">=</span> mid <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+        }
+    }
+    dp1[x] <span style="color:#f92672">=</span> ans <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#75715e">//维护r1数组，特殊处理等于0的情况。
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (r1[dp1[x]] <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>) {
+        r1[dp1[x]] <span style="color:#f92672">=</span> a[x];
+    }
+    <span style="color:#66d9ef">else</span> {
+        r1[dp1[x]] <span style="color:#f92672">=</span> max(r1[dp1[x]], a[x]);
+    }
+
+    <span style="color:#66d9ef">return</span>;
+}
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">二分猜测答案
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bin_check2</span>(<span style="color:#66d9ef">int</span> x)
+{
+    <span style="color:#66d9ef">int</span> left <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">int</span> right <span style="color:#f92672">=</span> x <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">int</span> ans <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">int</span> mid;
+    <span style="color:#75715e">//二分枚举dp2[x]的可能解
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">while</span> (left <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> right) {
+        <span style="color:#75715e">//猜测一个dp2值为mid
+</span><span style="color:#75715e"></span>        mid <span style="color:#f92672">=</span> (left <span style="color:#f92672">+</span> right) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+        <span style="color:#66d9ef">if</span> (r2[mid] <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> r2[mid] <span style="color:#f92672">&lt;</span> a[x]) {
+            ans <span style="color:#f92672">=</span> mid;
+            left <span style="color:#f92672">=</span> mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+        }
+        <span style="color:#66d9ef">else</span> {
+            right <span style="color:#f92672">=</span> mid <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+        }
+    }
+    dp2[x] <span style="color:#f92672">=</span> ans <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#75715e">//维护r2数组，特殊处理等于0的情况。
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (r2[dp2[x]] <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>) {
+        r2[dp2[x]] <span style="color:#f92672">=</span> a[x];
+    }
+    <span style="color:#66d9ef">else</span> {
+        r2[dp2[x]] <span style="color:#f92672">=</span> min(r2[dp2[x]], a[x]);
+    }
+    
+    <span style="color:#66d9ef">return</span>;
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1714,6 +1856,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1728,6 +1871,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1744,6 +1888,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2195,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="动态规划"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/" title="最长公共子序列" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

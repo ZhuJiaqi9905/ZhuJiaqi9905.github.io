@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>Cube stacking :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%B9%B6%E6%9F%A5%E9%9B%86/cube-stacking/">
     <nav id="sidebar" class="">
 
 
@@ -437,7 +437,7 @@
   
     
     <li data-nav-id="/%E5%B9%B6%E6%9F%A5%E9%9B%86/" title="并查集" class="dd-item 
-        
+        parent
         
         
         ">
@@ -488,8 +488,8 @@
   
     
     <li data-nav-id="/%E5%B9%B6%E6%9F%A5%E9%9B%86/cube-stacking/" title="Cube stacking" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/cube-stacking/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%B9%B6%E6%9F%A5%E9%9B%86/'>并查集</a> > Cube stacking
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              Cube stacking
             </h1>
           
 
@@ -1277,11 +1290,86 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="http://poj.org/problem?id=1988">POJ1988 Cube stacking</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>有N堆方块，开始每堆都是一个方块，编号为1~N。有两种操作：</li>
+<li>M x y: 表示把方块x所在的堆，拿起来叠放到y所在的堆上。</li>
+<li>C x：问方块x下面有多少个方块。</li>
+<li>操作最多P次。对每次C操作，输出结果。</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>利用并查集。维护sum[]，记录每堆总共的方块数。维护under[],under[i]表示第i个方块下面的方块数。</li>
+<li>sum在堆合并的时候更新，under在堆合并和路径压缩的时候更新。</li>
+<li>这题相当于：落在上面的方块，在并查集树中是下面的叶子节点。把y所在的堆落到x所在的堆上，相当于y所在的树挂接到x所在的树上。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#75715e">//把最下面的块当树根 
+</span><span style="color:#75715e"></span><span style="color:#75715e">//把a摞到b上，相当于把a挂接到b上 
+</span><span style="color:#75715e"></span><span style="color:#75715e">//记录sum是为了更新under 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> N;
+<span style="color:#66d9ef">int</span> par[<span style="color:#ae81ff">30010</span>];<span style="color:#75715e">//par[i]表示i的父节点
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> sum[<span style="color:#ae81ff">30010</span>];<span style="color:#75715e">//sum[i]表示第i堆总共的方块数 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> under[<span style="color:#ae81ff">30010</span>];<span style="color:#75715e">//under[i]表示在i下面的方块数 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">Getroot</span>(<span style="color:#66d9ef">int</span> x)
+{
+	<span style="color:#66d9ef">if</span>(x <span style="color:#f92672">=</span><span style="color:#f92672">=</span> par[x])
+		<span style="color:#66d9ef">return</span> x;
+	<span style="color:#66d9ef">int</span> px <span style="color:#f92672">=</span> Getroot(par[x]);
+	under[x] <span style="color:#f92672">+</span><span style="color:#f92672">=</span> under[par[x]]; 
+	par[x] <span style="color:#f92672">=</span> px;
+	<span style="color:#66d9ef">return</span> px;
+ } 
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Merge</span>(<span style="color:#66d9ef">int</span> x, <span style="color:#66d9ef">int</span> y)<span style="color:#75715e">//把y所在的堆叠放到x所在的堆上 
+</span><span style="color:#75715e"></span>{
+	<span style="color:#66d9ef">int</span> px <span style="color:#f92672">=</span> Getroot(x);
+	<span style="color:#66d9ef">int</span> py <span style="color:#f92672">=</span> Getroot(y);
+	<span style="color:#66d9ef">if</span>(px <span style="color:#f92672">=</span><span style="color:#f92672">=</span> py)
+		<span style="color:#66d9ef">return</span>;
+	par[py] <span style="color:#f92672">=</span> px;
+	under[py] <span style="color:#f92672">=</span> sum[px];
+	sum[px] <span style="color:#f92672">+</span><span style="color:#f92672">=</span> sum[py]; 
+	
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+	<span style="color:#66d9ef">int</span> i;
+	<span style="color:#66d9ef">for</span>( i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">30000</span>; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+		par[i] <span style="color:#f92672">=</span> i;
+		sum[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+		under[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+	}
+	<span style="color:#66d9ef">int</span> P;
+	scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>P); <span style="color:#66d9ef">char</span> s[<span style="color:#ae81ff">20</span>]; <span style="color:#66d9ef">int</span> a, b;
+	<span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> P; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i){
+		scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span>, s);
+		<span style="color:#66d9ef">if</span>(s[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">M</span><span style="color:#e6db74">&#39;</span>){
+			scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a, <span style="color:#f92672">&amp;</span>b);
+			Merge(b,a);
+		}
+		<span style="color:#66d9ef">else</span>{
+			scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a);
+			Getroot(a);
+			printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, under[a]);
+		}
+	}
+}
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1566,6 +1654,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1580,6 +1669,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1597,6 +1689,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1612,6 +1705,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2144,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/a-bugs-life/" title="A Bug&#39;s Life"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/the-suspects/" title="The Suspect" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

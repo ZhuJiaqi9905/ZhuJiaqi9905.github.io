@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>ZGOJ1561 区间抑或 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/">
     <nav id="sidebar" class="">
 
 
@@ -1121,7 +1121,7 @@
   
     
     <li data-nav-id="/%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="线段树" class="dd-item 
-        
+        parent
         
         
         ">
@@ -1148,8 +1148,8 @@
   
     
     <li data-nav-id="/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/" title="ZGOJ1561 区间抑或" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E7%BA%BF%E6%AE%B5%E6%A0%91/%E5%8C%BA%E9%97%B4%E6%8A%91%E6%88%96/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E7%BA%BF%E6%AE%B5%E6%A0%91/'>线段树</a> > ZGOJ1561 区间抑或
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              ZGOJ1561 区间抑或
             </h1>
           
 
@@ -1277,11 +1290,161 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p>打不开了</p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>忘了</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>利用线段树，区间操作注意用延迟更新，包括向下更新和向上更新。</li>
+<li>注意要用unsigned int。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> a[<span style="color:#ae81ff">100010</span>];
+<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> b;
+<span style="color:#66d9ef">int</span> n;<span style="color:#75715e">//n个数 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> m;<span style="color:#75715e">//m个查询 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Node</span> {
+	<span style="color:#66d9ef">int</span> L, R;
+	<span style="color:#66d9ef">int</span> sum;<span style="color:#75715e">//区间的抑或和 
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">int</span> lazy;
+	<span style="color:#66d9ef">int</span> val;
+	<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">Mid</span>() {
+		<span style="color:#66d9ef">return</span> (L <span style="color:#f92672">+</span> R) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+	}
+};
+Node tree[<span style="color:#ae81ff">400010</span>];
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">build_tree</span>(<span style="color:#66d9ef">int</span> root, <span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+{
+	tree[root].L <span style="color:#f92672">=</span> l; tree[root].R <span style="color:#f92672">=</span> r; tree[root].lazy <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; tree[root].val <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+	<span style="color:#66d9ef">if</span> (l <span style="color:#f92672">=</span><span style="color:#f92672">=</span> r) {
+		tree[root].sum <span style="color:#f92672">=</span> a[l]; tree[root].val <span style="color:#f92672">=</span> a[l];
+		<span style="color:#66d9ef">return</span>;
+	}
+	<span style="color:#66d9ef">int</span> lc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>);
+	<span style="color:#66d9ef">int</span> rc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>;
+	<span style="color:#66d9ef">int</span> mid <span style="color:#f92672">=</span> tree[root].Mid();
+	build_tree(lc, l, mid);
+	build_tree(rc, mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, r);
+	tree[root].sum <span style="color:#f92672">=</span> tree[lc].sum <span style="color:#f92672">^</span> tree[rc].sum;
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">query_tree</span>(<span style="color:#66d9ef">int</span> root, <span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+{
+	<span style="color:#66d9ef">if</span> (tree[root].L <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> l <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> tree[root].R <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> r <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> tree[root].lazy) {
+		<span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">-</span> l <span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span>) {
+			<span style="color:#66d9ef">return</span> tree[root].val;
+		}
+		<span style="color:#66d9ef">else</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+		}
+	}
+	<span style="color:#66d9ef">if</span> (tree[root].L <span style="color:#f92672">=</span><span style="color:#f92672">=</span> l <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> tree[root].R <span style="color:#f92672">=</span><span style="color:#f92672">=</span> r) {
+		<span style="color:#66d9ef">return</span> tree[root].sum;
+	}
+	<span style="color:#66d9ef">int</span> lc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>);
+	<span style="color:#66d9ef">int</span> rc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>;
+	<span style="color:#66d9ef">int</span> mid <span style="color:#f92672">=</span> tree[root].Mid();
+	<span style="color:#66d9ef">if</span> (r <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> mid) {
+		<span style="color:#66d9ef">return</span> query_tree(lc, l, r);
+	}
+	<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (l <span style="color:#f92672">&gt;</span> mid) {
+		<span style="color:#66d9ef">return</span> query_tree(rc, l, r);
+	}
+	<span style="color:#66d9ef">else</span> {
+		<span style="color:#66d9ef">return</span> (query_tree(lc, l, mid) <span style="color:#f92672">^</span> query_tree(rc, mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, r));
+	}
+}
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">change_tree</span>(<span style="color:#66d9ef">int</span> root, <span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r, <span style="color:#66d9ef">int</span> num)
+{
+	<span style="color:#66d9ef">if</span> (tree[root].L <span style="color:#f92672">=</span><span style="color:#f92672">=</span> l <span style="color:#f92672">&amp;</span><span style="color:#f92672">&amp;</span> tree[root].R <span style="color:#f92672">=</span><span style="color:#f92672">=</span> r) {
+		tree[root].val <span style="color:#f92672">=</span> num; tree[root].lazy <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+		<span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">-</span> l <span style="color:#f92672">+</span><span style="color:#ae81ff">1</span> ) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span>) {
+			tree[root].sum <span style="color:#f92672">=</span> num;
+		}
+		<span style="color:#66d9ef">else</span>
+			tree[root].sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+		<span style="color:#66d9ef">return</span>;
+	}
+	<span style="color:#66d9ef">int</span> lc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>);
+	<span style="color:#66d9ef">int</span> rc <span style="color:#f92672">=</span> (root <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>;
+	<span style="color:#66d9ef">int</span> mid <span style="color:#f92672">=</span> tree[root].Mid();
+	<span style="color:#66d9ef">if</span> (tree[root].lazy) {
+		tree[root].lazy <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; tree[lc].lazy <span style="color:#f92672">=</span> tree[rc].lazy <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+		tree[lc].val <span style="color:#f92672">=</span> tree[rc].val <span style="color:#f92672">=</span> tree[root].val;
+		<span style="color:#66d9ef">if</span> ((tree[lc].R <span style="color:#f92672">-</span> tree[lc].L <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span>) {
+			tree[lc].sum <span style="color:#f92672">=</span> tree[lc].val;
+		}
+		<span style="color:#66d9ef">else</span>
+			tree[lc].sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+		<span style="color:#66d9ef">if</span> ((tree[rc].R <span style="color:#f92672">-</span> tree[rc].L <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span>) {
+			tree[rc].sum <span style="color:#f92672">=</span> tree[rc].val;
+		}
+		<span style="color:#66d9ef">else</span>
+			tree[rc].sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+	}
+	<span style="color:#66d9ef">if</span> (r <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> mid) {
+		change_tree(lc, l, r, num);
+	}
+	<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (l <span style="color:#f92672">&gt;</span> mid) {
+		change_tree(rc, l, r, num);
+	}
+	<span style="color:#66d9ef">else</span> {
+		change_tree(lc, l, mid, num);
+		change_tree(rc, mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, r, num);
+	}
+	tree[root].sum <span style="color:#f92672">=</span> tree[lc].sum <span style="color:#f92672">^</span> tree[rc].sum; <span style="color:#75715e">//tree[root].lazy = 0;
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span>;
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+	<span style="color:#66d9ef">int</span> T;
+	scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>T);
+	<span style="color:#66d9ef">int</span> i, j; <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> ans;<span style="color:#75715e">//注意要用unsigned int !!! 
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">while</span> (T<span style="color:#f92672">-</span><span style="color:#f92672">-</span>) {
+		scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>n, <span style="color:#f92672">&amp;</span>m);
+		memset(tree, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(tree));
+		memset(a, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(a));
+
+		<span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> n; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+			scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%u</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>b);
+			a[i] <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span>)b;
+		}
+		
+		build_tree(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, n);
+		<span style="color:#66d9ef">char</span> s[<span style="color:#ae81ff">3</span>]; <span style="color:#66d9ef">int</span> a, b, x;
+		<span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> m; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+			scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span>, s);
+			<span style="color:#66d9ef">if</span> (s[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C</span><span style="color:#e6db74">&#39;</span>) {
+				scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a, <span style="color:#f92672">&amp;</span>b, <span style="color:#f92672">&amp;</span>x);
+				change_tree(<span style="color:#ae81ff">1</span>, a, b, x);
+			}
+			<span style="color:#66d9ef">else</span> {
+				scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a, <span style="color:#f92672">&amp;</span>b);
+				ans <span style="color:#f92672">=</span> query_tree(<span style="color:#ae81ff">1</span>, a, b);
+				printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%u</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, ans);
+			}
+		}
+		printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1994,6 +2157,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -2008,6 +2172,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -2024,6 +2189,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2216,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="线段树"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E7%BA%BF%E6%AE%B5%E6%A0%91/majors_poster/" title="POJ2528 Mayor&#39;s poster" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

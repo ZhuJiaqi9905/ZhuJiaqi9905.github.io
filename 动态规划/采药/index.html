@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>采药 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E9%87%87%E8%8D%AF/">
     <nav id="sidebar" class="">
 
 
@@ -673,7 +673,7 @@
   
     
     <li data-nav-id="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="动态规划" class="dd-item 
-        
+        parent
         
         
         ">
@@ -772,8 +772,8 @@
   
     
     <li data-nav-id="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E9%87%87%E8%8D%AF/" title="采药" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E9%87%87%E8%8D%AF/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/'>动态规划</a> > 采药
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              采药
             </h1>
           
 
@@ -1277,11 +1290,59 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="https://www.luogu.com.cn/problem/P1048">采药</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>山洞里有药，每种药有一定价值，和需要的采药时间。已知：T代表总共能够用来采药的时间，M代表山洞里的草药的数目，求最多能采药的价值？</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>标准的01背包问题。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;queue&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;stack&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cmath&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> T;<span style="color:#75715e">//采药时间
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> M;<span style="color:#75715e">//草药数目
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> wgh[<span style="color:#ae81ff">110</span>];
+<span style="color:#66d9ef">int</span> val[<span style="color:#ae81ff">110</span>];
+<span style="color:#66d9ef">int</span> dp[<span style="color:#ae81ff">1010</span>];
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>T, <span style="color:#f92672">&amp;</span>M);
+    <span style="color:#66d9ef">int</span> i, j;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> M; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>wgh[i], <span style="color:#f92672">&amp;</span>val[i]);
+    }
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> wgh[<span style="color:#ae81ff">1</span>]; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> T; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        dp[i] <span style="color:#f92672">=</span> val[<span style="color:#ae81ff">1</span>];
+    }
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> M; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> T; j <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> wgh[i]; <span style="color:#f92672">-</span><span style="color:#f92672">-</span>j) {
+            dp[j] <span style="color:#f92672">=</span> max(dp[j], dp[j <span style="color:#f92672">-</span> wgh[i]] <span style="color:#f92672">+</span> val[i]);
+        }
+    }
+    <span style="color:#66d9ef">int</span> ans <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> T; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+        ans <span style="color:#f92672">=</span> max(ans, dp[i]);
+    }
+    printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, ans);
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1714,6 +1775,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1728,6 +1790,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1777,6 +1842,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1795,6 +1861,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2117,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%A3%85%E7%AE%B1%E9%97%AE%E9%A2%98/" title="装箱问题"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E6%9D%82%E8%B0%88/" title="杂谈" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

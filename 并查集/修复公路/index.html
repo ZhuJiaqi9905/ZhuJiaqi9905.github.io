@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Categories :: My New Hugo Site</title>
+    <title>修复公路 :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1582888774" rel="stylesheet">
@@ -33,7 +33,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/%E5%B9%B6%E6%9F%A5%E9%9B%86/%E4%BF%AE%E5%A4%8D%E5%85%AC%E8%B7%AF/">
     <nav id="sidebar" class="">
 
 
@@ -437,7 +437,7 @@
   
     
     <li data-nav-id="/%E5%B9%B6%E6%9F%A5%E9%9B%86/" title="并查集" class="dd-item 
-        
+        parent
         
         
         ">
@@ -536,8 +536,8 @@
   
     
     <li data-nav-id="/%E5%B9%B6%E6%9F%A5%E9%9B%86/%E4%BF%AE%E5%A4%8D%E5%85%AC%E8%B7%AF/" title="修复公路" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/%E4%BF%AE%E5%A4%8D%E5%85%AC%E8%B7%AF/">
@@ -1241,7 +1241,13 @@
             
           
           
-            <a href='/'>HomePage</a> > Categories
+            
+            
+          
+          
+            <a href='/'>HomePage</a> > <a href='/%E5%B9%B6%E6%9F%A5%E9%9B%86/'>并查集</a> > 修复公路
+          
+         
           
          
           
@@ -1252,7 +1258,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#题目链接">题目链接</a></li>
+    <li><a href="#题目描述">题目描述</a></li>
+    <li><a href="#解题思路">解题思路</a></li>
+    <li><a href="#代码">代码</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1268,7 +1281,7 @@
           
             <h1>
               
-              Categories
+              修复公路
             </h1>
           
 
@@ -1277,11 +1290,95 @@
 
 
 
-
-
+	<h2 id="题目链接">题目链接</h2>
+<p><a href="https://www.luogu.com.cn/problem/P1111">洛谷 修复公路</a></p>
+<h2 id="题目描述">题目描述</h2>
 <ul>
-	
+<li>给出A地区的村庄数N，和公路数M，公路是双向的。并告诉你每条公路的连着哪两个村庄，并告诉你什么时候能修完这条公路。</li>
+<li>问最早什么时候任意两个村庄能够通车，即最早什么时候任意两条村庄都存在至少一条修复完成的道路（可以由多条公路连成一条道路）</li>
 </ul>
+<h2 id="解题思路">解题思路</h2>
+<ul>
+<li>将修复公路的操作按照时间排序。维护记录集合中元素数目的并查集。</li>
+<li>sum[GetRoot(a)]表示a所在的集合的元素个数，如果元素个数等于总村庄数，则全部连通。</li>
+</ul>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdio&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstring&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span><span style="color:#75715e">&lt;cstdlib&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> MAX <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>;
+<span style="color:#66d9ef">int</span> parent[MAX <span style="color:#f92672">+</span> <span style="color:#ae81ff">10</span>];
+<span style="color:#66d9ef">int</span> sum[MAX <span style="color:#f92672">+</span> <span style="color:#ae81ff">10</span>];
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Part</span> {
+	<span style="color:#66d9ef">int</span> x, y, t;
+};
+Part path[<span style="color:#ae81ff">100010</span>];
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myCompare</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> e1, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> e2);
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Merge</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b);
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">GetRoot</span>(<span style="color:#66d9ef">int</span> a);
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">Query</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b);
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+	<span style="color:#66d9ef">int</span> N, M; <span style="color:#75715e">//N村庄，M公路
+</span><span style="color:#75715e"></span>	scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>N, <span style="color:#f92672">&amp;</span>M); 
+	<span style="color:#66d9ef">int</span> T <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> M; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+		scanf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d%d%d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>path[i].x, <span style="color:#f92672">&amp;</span>path[i].y, <span style="color:#f92672">&amp;</span>path[i].t);
+	}
+	<span style="color:#66d9ef">bool</span> flag <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+	qsort(path, M, <span style="color:#66d9ef">sizeof</span>(Part), myCompare);<span style="color:#75715e">//按时间从小到大排序 
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> N; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+		parent[i] <span style="color:#f92672">=</span> i; sum[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+	}
+	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> M; <span style="color:#f92672">+</span><span style="color:#f92672">+</span>i) {
+		<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>Query(path[i].x, path[i].y)) {
+			Merge(path[i].x, path[i].y);
+			<span style="color:#66d9ef">if</span> (sum[GetRoot(path[i].x)] <span style="color:#f92672">=</span><span style="color:#f92672">=</span> N) {
+				T<span style="color:#f92672">=</span>path[i].t; <span style="color:#66d9ef">break</span>;
+			}
+		}
+	}
+	printf(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, T);
+
+
+}
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myCompare</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> e1, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> e2)
+{
+	<span style="color:#66d9ef">const</span> Part<span style="color:#f92672">*</span> p1 <span style="color:#f92672">=</span> (<span style="color:#66d9ef">const</span> Part<span style="color:#f92672">*</span>)e1;
+	<span style="color:#66d9ef">const</span> Part<span style="color:#f92672">*</span> p2 <span style="color:#f92672">=</span> (<span style="color:#66d9ef">const</span> Part<span style="color:#f92672">*</span>)e2;
+	<span style="color:#66d9ef">if</span> (p1<span style="color:#f92672">-</span><span style="color:#f92672">&gt;</span>t <span style="color:#f92672">&lt;</span> p2<span style="color:#f92672">-</span><span style="color:#f92672">&gt;</span>t)
+		<span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+	<span style="color:#66d9ef">else</span>
+		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+}
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">GetRoot</span>(<span style="color:#66d9ef">int</span> a)
+{
+	<span style="color:#66d9ef">if</span> (a <span style="color:#f92672">!</span><span style="color:#f92672">=</span> parent[a]) {
+		parent[a] <span style="color:#f92672">=</span> GetRoot(parent[a]);
+	}
+	<span style="color:#66d9ef">return</span> parent[a];
+
+}
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Merge</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b)
+{
+	<span style="color:#66d9ef">int</span> rb <span style="color:#f92672">=</span> GetRoot(b);
+	<span style="color:#66d9ef">int</span> ra <span style="color:#f92672">=</span> GetRoot(a);
+	parent[rb] <span style="color:#f92672">=</span> ra;
+	sum[ra] <span style="color:#f92672">+</span><span style="color:#f92672">=</span> sum[rb]; <span style="color:#75715e">//根节点维护这个集合元素的总个数 
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span>;
+}
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">Query</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b)
+{
+	<span style="color:#66d9ef">return</span> GetRoot(a) <span style="color:#f92672">=</span><span style="color:#f92672">=</span> GetRoot(b);
+}
+
+</code></pre></div>
+
+
 
 
 <footer class=" footline" >
@@ -1566,6 +1663,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1580,6 +1678,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1629,6 +1730,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1644,6 +1746,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2048,8 +2153,10 @@
 	 
 	 
 		
+			<a class="nav nav-prev" href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/the-suspects/" title="The Suspect"> <i class="fa fa-chevron-left"></i></a>
 		
-			<a class="nav nav-next" href="/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="机器学习" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+			<a class="nav nav-next" href="/%E5%B9%B6%E6%9F%A5%E9%9B%86/%E9%93%B6%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%A0%E8%AF%B4/" title="银河英雄传说" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
