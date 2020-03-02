@@ -11,5 +11,15 @@
 	<atom:link href="https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/index.xml" rel="self" type="application/rss+xml" />
     
     
+    <item>
+      <title>线段上的格点数</title>
+      <link>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</link>
+      <pubDate>Sun, 02 Feb 2020 19:04:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</guid>
+      <description>题目描述 给定平面上的两个格点P和Q的坐标。求线段PQ除端点以外一共有多少个格点？
+解题思路  答案是线段x轴投影长度与y轴投影长度的最大公约数-1 注意特判P与Q重合的情况  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;stack&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; /*辗转相除法，求a和b的最大公约数*/ int gcd(int a, int b) { if(b == 0) return a; return gcd(b, a % b); } int main() { int x1, y1, x2, y2; scanf(&amp;#34;%d%d%d%d&amp;#34;, &amp;amp;x1, &amp;amp;y1, &amp;amp;x2, &amp;amp;y2); int dx = abs(x1 - x2); int dy = abs(y1 - y2); int ans; if(!dx &amp;amp;&amp;amp; !dy){ //特判dx==0&amp;amp;&amp;amp;dy==0的情况  ans = 0; } else{ ans = gcd(dx, dy) - 1; } printf(&amp;#34;%d\n&amp;#34;, ans); } </description>
+    </item>
+    
   </channel>
 </rss>

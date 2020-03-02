@@ -11,5 +11,15 @@
 	<atom:link href="https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/index.xml" rel="self" type="application/rss+xml" />
     
     
+    <item>
+      <title>素数判定</title>
+      <link>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/</link>
+      <pubDate>Mon, 03 Feb 2020 19:06:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/</guid>
+      <description>题目描述 给定数n，判断n是否为素数；求n的约数；求n的整数分解形式
+解题思路  枚举n可能的约数  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;stack&amp;gt;#include&amp;lt;cmath&amp;gt;#include&amp;lt;map&amp;gt;using namespace std; /* 素数测试判断素数 */ bool isPrime1(int n) { if(n == 1) return false; int k = sqrt(n); for (int i = 2; i &amp;lt;= k; ++i){ if(n % i == 0) return false; } return true; } /* 约数枚举 */ vector&amp;lt;int&amp;gt; divisor(int n) { vector&amp;lt;int&amp;gt; res; int k = sqrt(n); for(int i = 1; i &amp;lt;= k; ++i){ if(n % i == 0){ res.</description>
+    </item>
+    
   </channel>
 </rss>

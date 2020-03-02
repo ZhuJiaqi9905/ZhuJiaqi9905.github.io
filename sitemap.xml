@@ -3,6 +3,31 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%9B%BE/</loc>
+    <lastmod>2020-03-02T21:24:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/the-sierpinski-fractal/</loc>
+    <lastmod>2020-03-02T20:26:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E4%BC%A0%E6%95%99%E5%A3%AB%E4%B8%8E%E9%A3%9F%E4%BA%BA%E6%97%8F/</loc>
+    <lastmod>2020-03-02T20:26:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E5%B8%83%E5%B0%94%E8%A1%A8%E8%BE%BE%E5%BC%8F/</loc>
+    <lastmod>2020-03-02T20:26:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</loc>
+    <lastmod>2020-03-01T22:44:01+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://zhujiaqi9905.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/</loc>
     <lastmod>2020-02-28T19:05:00+08:00</lastmod>
   </url>
@@ -38,6 +63,11 @@
   </url>
   
   <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%9E%9A%E4%B8%BE/</loc>
+    <lastmod>2020-02-20T21:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://zhujiaqi9905.github.io/%E8%B4%AA%E5%BF%83/best-cow-line/</loc>
     <lastmod>2020-02-20T14:37:00+08:00</lastmod>
   </url>
@@ -64,6 +94,16 @@
   
   <url>
     <loc>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/lake-counting/</loc>
+    <lastmod>2020-02-19T21:37:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/sudoku/</loc>
+    <lastmod>2020-02-19T21:37:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%9E%9A%E4%B8%BE/%E7%94%BB%E5%AE%B6%E9%97%AE%E9%A2%98/</loc>
     <lastmod>2020-02-19T21:37:00+08:00</lastmod>
   </url>
   
@@ -133,6 +173,11 @@
   </url>
   
   <url>
+    <loc>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/random-walk/</loc>
+    <lastmod>2020-02-03T19:06:01+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/</loc>
     <lastmod>2020-02-03T19:06:01+08:00</lastmod>
   </url>
@@ -148,7 +193,17 @@
   </url>
   
   <url>
+    <loc>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</loc>
+    <lastmod>2020-02-02T19:04:01+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/</loc>
+    <lastmod>2020-02-02T19:02:01+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</loc>
     <lastmod>2020-02-02T19:02:01+08:00</lastmod>
   </url>
   
@@ -170,6 +225,11 @@
   <url>
     <loc>https://zhujiaqi9905.github.io/%E7%BA%BF%E6%AE%B5%E6%A0%91/</loc>
     <lastmod>2020-02-02T10:40:01+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://zhujiaqi9905.github.io/tree/</loc>
+    <priority>0</priority>
   </url>
   
   <url>

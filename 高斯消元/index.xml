@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>高斯消元 on My New Hugo Site</title>
+    <link>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</link>
+    <description>Recent content in 高斯消元 on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Feb 2020 19:02:01 +0800</lastBuildDate>
+    
+	<atom:link href="https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>高斯消元模板</title>
+      <link>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</link>
+      <pubDate>Sun, 01 Mar 2020 22:44:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</guid>
+      <description>题目描述 高斯消元模板
+代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; const double EPS = 1e-8; const int MAXN = 220; double A[MAXN][MAXN], b[MAXN]; double x[MAXN]; int equ, var;//方程数和未知数个数 /* 返回0代表无解，1代表有解 函数会改变矩阵A和向量b */ int gauss() { int i, j, k; int col, maxR; //相当于每次沿对角线前进，第k行，第col列  for (k = 0, col = 0; k &amp;lt; equ &amp;amp;&amp;amp; col &amp;lt; var; ++k, ++col) { maxR = k; //找到绝对值最大的主元  for (i = k + 1; i &amp;lt; equ; ++i) { if (fabs(A[i][col]) &amp;gt; fabs(A[maxR][col])) { maxR = i; } } //无解  if (fabs(A[maxR][col]) &amp;lt; EPS) { return 0; } //把主元行移到目前待处理的最开始行  if (k !</description>
+    </item>
+    
+    <item>
+      <title>Random Walk</title>
+      <link>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/random-walk/</link>
+      <pubDate>Mon, 03 Feb 2020 19:06:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/random-walk/</guid>
+      <description>题目描述 有一个N*M大小的格子。从（0，0）出发，可以向四个方向等概率随机游走。另外有一些格子有石头，无法移动到这些格子。求第一次到达(N-1, M-1)格子的期望步数。假定一定存在这个路径。
+解题思路  如果四个方向都能移动： E(x,y)=(E(x-1,y)+E(x+1,y)+E(x,y+1)+E(x,y-1))/4+1 即有： 4E(x,y)-E(x-1,y)-E(x+1,y)-E(x,y+1)-E(x,y-1)=4 如果有的方向是石子，就把上式稍作改变即可，要保证是等概率的。 可以把上式看成是一个方程，如果格子上的每个点都列一个方程，就能组成一个N*M的方程组，解出方程组就能求出答案。对于是石子的格子，E(x,y)=0。对于(x,y)=(N-1,M-1)，E(x,y)=0。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; const double EPS = 1e-8; const int MAXN = 220; double A[MAXN][MAXN], b[MAXN]; double X[MAXN]; int n, m; bool canGoal[20][20]; char maze[20][20]; int equ, var;//方程数和未知数个数 int go[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} }; int gauss(); void dfs(int x, int y); int main() { scanf(&amp;#34;%d%d&amp;#34;, &amp;amp;n, &amp;amp;m); int i, j;int x, y; int move; for (i = 0; i &amp;lt; n; ++i) { scanf(&amp;#34;%s&amp;#34;, maze[i]); } dfs(n - 1, m - 1); //生成方程组  equ = var = n * m; for (x = 0; x &amp;lt; n; ++x) { for (y = 0; y &amp;lt; m; ++y) { //如果是终点，或者是不能到终点的点  if ((x == n - 1 &amp;amp;&amp;amp; y == m - 1) || !</description>
+    </item>
+    
+  </channel>
+</rss>

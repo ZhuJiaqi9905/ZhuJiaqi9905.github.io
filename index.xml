@@ -12,6 +12,60 @@
     
     
     <item>
+      <title>文件结构图</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%9B%BE/</link>
+      <pubDate>Mon, 02 Mar 2020 21:24:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%9B%BE/</guid>
+      <description>题目链接 文件结构图
+题目描述 给定文件的结构，按照结构图的形式输出。
+解题思路  用递归的方法。比较巧妙。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;fstream&amp;gt;using namespace std; int file(int k, int nkase, string f); int main() { int kase = 0; while (1) { ++kase; int t = file(0, kase, &amp;#34;ROOT&amp;#34;); if (t == 0) { break; } cout &amp;lt;&amp;lt; endl; } return 0; } int file(int k, int nkase, string f) { for (int i = 0; i &amp;lt; k; ++i) { cout &amp;lt;&amp;lt; &amp;#34;| &amp;#34;; } if (k) { cout &amp;lt;&amp;lt; f &amp;lt;&amp;lt; endl; } int flag = 0; vector&amp;lt;string&amp;gt; v; while (1) { string s; cin &amp;gt;&amp;gt; s; if (s[0] == &amp;#39;#&amp;#39;)	return 0; if (!</description>
+    </item>
+    
+    <item>
+      <title>The Sierpinski Fractal</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/the-sierpinski-fractal/</link>
+      <pubDate>Mon, 02 Mar 2020 20:26:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/the-sierpinski-fractal/</guid>
+      <description>题目链接 The Sierpinski Fractal
+题目描述 给定n,画出对应大小的分型图形。
+解题思路  用递归的方法画图，感觉很巧妙。这题难的就是细节。 要首先把图用char数组存起来，画好之后再输出。 注意反斜杠需要转义，注意空白的地方补空格，注意不要多输出一行。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; char map[2500][2500]; void draw(int k, int x, int y); int main() { int n; while (scanf(&amp;#34;%d&amp;#34;, &amp;amp;n)) { if (!n) break; memset(map, &amp;#39;&amp;#39;, sizeof(map)); draw(n, 0, (1 &amp;lt;&amp;lt; n) - 1); for (int i = 0; i &amp;lt; (1 &amp;lt;&amp;lt; n); ++i) { for (int j = 0; j &amp;lt; ((1 &amp;lt;&amp;lt; n) + i + 1); ++j) { printf(&amp;#34;%c&amp;#34;, map[i][j]); } printf(&amp;#34;\n&amp;#34;); } printf(&amp;#34;\n&amp;#34;); } return 0; } void draw(int k, int x, int y) { if (k == 1) { map[x][y] = &amp;#39;/&amp;#39;; map[x][y + 1] = &amp;#39;\\&amp;#39;; map[x + 1][y - 1] = &amp;#39;/&amp;#39;; map[x + 1][y] = &amp;#39;_&amp;#39;; map[x + 1][y + 1] = &amp;#39;_&amp;#39;; map[x + 1][y + 2] = &amp;#39;\\&amp;#39;; return; } --k; int xx = x + (1 &amp;lt;&amp;lt; k); int yyl = y - (1 &amp;lt;&amp;lt; k); int yyr = y + (1 &amp;lt;&amp;lt; k); draw(k, x, y); draw(k, xx, yyl); draw(k, xx, yyr); return; } </description>
+    </item>
+    
+    <item>
+      <title>传教士与食人族</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E4%BC%A0%E6%95%99%E5%A3%AB%E4%B8%8E%E9%A3%9F%E4%BA%BA%E6%97%8F/</link>
+      <pubDate>Mon, 02 Mar 2020 20:26:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E4%BC%A0%E6%95%99%E5%A3%AB%E4%B8%8E%E9%A3%9F%E4%BA%BA%E6%97%8F/</guid>
+      <description>题目链接 传教士与食人族
+题目描述 有M个传教士和野人。一个容量为N的船。他们想从A到B地，要保证无论是在A还是B还是船上，如果有传教士，那么那里的野人数一定不超过传教士数目。问最少要几步能完成任务。
+解题思路  此题可以用bfs，但是POJ有一个类似题直接bfs会RE，估计要A*算法。 这个题难度在状态的表示，其实只需要记录A地的传教士数目，野人数目，和船的行驶方向即可。枚举可能在船上的人数情况，就能根据总人数直接推断出B地的人数。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; struct Node { int m, c;//m是传教士数，c是野人数  int step; int to;//0表示要从A到B，1表示要从B到A }; bool visit[1010][1010][2]; int M;//M个cannibal和missionary int N;//船的容量 queue&amp;lt;Node&amp;gt; q; int main() { scanf(&amp;#34;%d%d&amp;#34;, &amp;amp;M, &amp;amp;N); Node nd; nd.m = M; nd.c = M; nd.step = 0; nd.to = 0; q.push(nd); visit[M][M][0] = 1; int ans = -1; while (!q.empty()) { nd = q.front(); q.pop(); if (nd.m == 0 &amp;amp;&amp;amp; nd.</description>
+    </item>
+    
+    <item>
+      <title>布尔表达式</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E5%B8%83%E5%B0%94%E8%A1%A8%E8%BE%BE%E5%BC%8F/</link>
+      <pubDate>Mon, 02 Mar 2020 20:26:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E5%B8%83%E5%B0%94%E8%A1%A8%E8%BE%BE%E5%BC%8F/</guid>
+      <description>题目链接 布尔表达式
+题目描述 对布尔表达式进行求值。
+解题思路  要把所求问题分为：表达式、项、因子三个部分，递归求解。 表达式：若干个项通过&amp;amp;，|连接起来，就是表达式 项：一个因子是一个项。一个因子取非是一个项。 因子：V和F是因子。带括号的表达式是因子。 由于取非是前置运算符，因此在factorValue()中，如果检测到了！,就直接调用itemValue进行求值。 其实表达式，项，因子就是按照优先级顺序对表达式进行拆分。感觉很容易写错，以后还是考虑用栈写吧。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; char s[100]; int len; int move_blank(char* a); bool expValue(); bool itemValue(); bool factorValue(); int ope = 0; //处理位置 int main() { char a[110]; int kase = 0; while (cin.getline(a, 110, &amp;#39;\n&amp;#39;)) { ++kase; memset(s, 0, sizeof(s)); len = move_blank(a); bool f = expValue(); cout &amp;lt;&amp;lt; &amp;#34;Expression &amp;#34; &amp;lt;&amp;lt; kase &amp;lt;&amp;lt; &amp;#34;: &amp;#34;; if (f) cout &amp;lt;&amp;lt; &amp;#34;V&amp;#34; &amp;lt;&amp;lt; endl; else cout &amp;lt;&amp;lt; &amp;#34;F&amp;#34; &amp;lt;&amp;lt; endl; memset(a, 0, sizeof(a)); ope = 0; } } int move_blank(char* a) { char* p = a; int i = 0; for (; *p !</description>
+    </item>
+    
+    <item>
+      <title>高斯消元模板</title>
+      <link>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</link>
+      <pubDate>Sun, 01 Mar 2020 22:44:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</guid>
+      <description>题目描述 高斯消元模板
+代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; const double EPS = 1e-8; const int MAXN = 220; double A[MAXN][MAXN], b[MAXN]; double x[MAXN]; int equ, var;//方程数和未知数个数 /* 返回0代表无解，1代表有解 函数会改变矩阵A和向量b */ int gauss() { int i, j, k; int col, maxR; //相当于每次沿对角线前进，第k行，第col列  for (k = 0, col = 0; k &amp;lt; equ &amp;amp;&amp;amp; col &amp;lt; var; ++k, ++col) { maxR = k; //找到绝对值最大的主元  for (i = k + 1; i &amp;lt; equ; ++i) { if (fabs(A[i][col]) &amp;gt; fabs(A[maxR][col])) { maxR = i; } } //无解  if (fabs(A[maxR][col]) &amp;lt; EPS) { return 0; } //把主元行移到目前待处理的最开始行  if (k !</description>
+    </item>
+    
+    <item>
       <title>决策树</title>
       <link>https://zhujiaqi9905.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/</link>
       <pubDate>Fri, 28 Feb 2020 19:05:00 +0800</pubDate>
@@ -68,6 +122,98 @@
       <guid>https://zhujiaqi9905.github.io/%E8%B4%AA%E5%BF%83/best-cow-line/</guid>
       <description>题目链接 POJ3617 Best Cow Line
 题目描述  奶牛题，抽象出来就是，给定长度为N的字符串S，要构造出一个长度N的字符串T。构造方式是：从S的头部或尾部删除一个字符，加到T的尾部 求字典序最小的T，每次输出80个字符后换行  解题思路  贪心，每次比较剩余的S串的头尾，选小的加入T的尾部。 要注意到头尾相同的情况，这是要接着往里比较，因为我们希望尽可能早使用更小的字符。 可以用a,b初始时指向S串的头尾，然后不断往里缩。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; int N; char s[10010]; char t[10010]; int main() { scanf(&amp;#34;%d&amp;#34;, &amp;amp;N); getchar(); int i; for (i = 0; i &amp;lt; N; ++i) { scanf(&amp;#34;%c&amp;#34;, &amp;amp;s[i]); getchar(); } int j = 0; int a = 0; int b = N - 1; //指向初始s的头尾，往里缩  while (a &amp;lt;= b) { bool left = false; //如果头尾相同，就不断往里找  for (i = 0; a + i &amp;lt;= b; ++i) { if (s[a + i] &amp;lt; s[b - i]) { left = true; break; } else if (s[a + i] &amp;gt; s[b - i]) { left = false; break; } } if (left) { t[j] = s[a]; a++; j++; } else { t[j] = s[b]; b--; j++; } } t[N] = &amp;#39;\0&amp;#39;; for (int i = 0; i &amp;lt; N; ++i) { if (i % 80 == 0 &amp;amp;&amp;amp; i !</description>
+    </item>
+    
+    <item>
+      <title>全排列</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E5%85%A8%E6%8E%92%E5%88%97/</link>
+      <pubDate>Wed, 19 Feb 2020 22:01:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E5%85%A8%E6%8E%92%E5%88%97/</guid>
+      <description>题目描述 求1~n的全排列
+解题思路  用dfs枚举全排列  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; int result[200]; int N; int used[200]; /*用dfs生成全排列*/ void permutation1(int k); /*优化后的全排列生成,但不是按顺序生成的， 思路： 求 S = {a1,a2,a3..an}的全排列，等于: for (int i = 1; i &amp;lt;= n; ++i ) { for x in (S – ai) 的每个排列 cout &amp;lt;&amp;lt; ai + x; } */ template&amp;lt;class T&amp;gt; void permutation2(T start, T end, T k) { //输出[start,k)固定的全排列  if (k == end) { for (start; start !</description>
+    </item>
+    
+    <item>
+      <title>Lake Counting</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/lake-counting/</link>
+      <pubDate>Wed, 19 Feb 2020 21:37:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/lake-counting/</guid>
+      <description>题目链接 POJ2386 Lake Counting
+题目描述 一个N*M的院子，雨后有积水。八连通的积水被认为是在一起的。求总共多少个水洼？
+解题思路  用dfs遍历院子，进行染色。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; char maze[110][110]; int visit[110][110]; int color; int n;//n行 int m;//m列 int go[8][2] = { {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {-1, -1},{0, -1}, {1, -1} }; void dfs(int x, int y); int main() { scanf(&amp;#34;%d%d&amp;#34;, &amp;amp;n, &amp;amp;m); int i, j; color = 0; for (i = 0; i &amp;lt; n; ++i) { scanf(&amp;#34;%s&amp;#34;, maze[i]); } for (i = 0; i &amp;lt; n; ++i) { for (j = 0; j &amp;lt; m; ++j) { if (!</description>
+    </item>
+    
+    <item>
+      <title>Suduko</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/sudoku/</link>
+      <pubDate>Wed, 19 Feb 2020 21:37:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/sudoku/</guid>
+      <description>题目链接 POJ2676 Lake Counting
+题目描述 9*9的数独
+解题思路  用dfs，首先将代填的空用vector记录出来，然后每个空按数字1到9填入。 通过row[i][k]表示数字k是否已在第i行出现;col[i][k]表示数字k是否已在第i列出现。加快对数字的判断。check()函数判断数字是否在该3*3块中满足条件。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; char c[9][9]; int a[9][9];//数独 int row[10][10];//row[i][k]表示数字k是否已在第i行出现 int col[10][10];//col[i][k]表示数字k是否已在第i列出现 struct State { int x, y; State(int xx, int yy) { x = xx; y = yy; } State(){} }; vector&amp;lt;State&amp;gt; ste; bool check(int x, int y, int k) { int sx = (x / 3) * 3; int sy = (y / 3) * 3; for (int i = sx; i &amp;lt; sx + 3; ++i) { for (int j = sy; j &amp;lt; sy + 3; ++j) { if (a[i][j] == k) { return 0; } } } return 1; } int dfs(int num) { if (num == ste.</description>
+    </item>
+    
+    <item>
+      <title>画家问题</title>
+      <link>https://zhujiaqi9905.github.io/%E6%9E%9A%E4%B8%BE/%E7%94%BB%E5%AE%B6%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Wed, 19 Feb 2020 21:37:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%9E%9A%E4%B8%BE/%E7%94%BB%E5%AE%B6%E9%97%AE%E9%A2%98/</guid>
+      <description>题目链接 画家问题
+题目描述 有一个正方形的墙，由N*N个正方形的砖组成，其中一些砖是白色的，另外一些砖是黄色的。Bob是个画家，想把全部的砖都涂成黄色。但他的画笔不好使。当他用画笔涂画第(i, j)个位置的砖时， 位置(i-1, j)、 (i+1, j)、 (i, j-1)、 (i, j+1)上的砖都会改变颜色。请你帮助Bob计算出最少需要涂画多少块砖，才能使所有砖的颜色都变成黄色。
+解题思路  枚举第一行的所有可能涂色法，由于第一行涂色后，为了把第一行全变黄，第二层涂色的方案就是固定的了。以此类推，直到最后一行，判断一下此时最后一行是否全黄。如果全黄，说明是一种可行的涂色法，那么再判断其是否是步数最少的就行了。 利用C++中的bitset，可以方便地处理涂色。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;bitset&amp;gt; using namespace std; int main() { int n; cin &amp;gt;&amp;gt; n; bitset&amp;lt;15&amp;gt; wall[15]; bitset&amp;lt;15&amp;gt; change[15]; char c; for (int i = 0; i &amp;lt; n; ++i) { for (int j = 0; j &amp;lt; n; ++j) { cin &amp;gt;&amp;gt; c; if (c == &amp;#39;y&amp;#39;) wall[i].set(j, 1); } } int k = 0; int sum = 0; int minsum = -1; for (; k &amp;lt; (1 &amp;lt;&amp;lt; n); ++k) { copy(wall, wall + 15, change); sum = 0; for (int i = 0; i &amp;lt; n; ++i) { if (((k &amp;gt;&amp;gt; i) &amp;amp; 1) == 1) { ++sum; change[0][i].</description>
+    </item>
+    
+    <item>
+      <title>部分和问题</title>
+      <link>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E9%83%A8%E5%88%86%E5%92%8C%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Wed, 19 Feb 2020 21:01:00 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%90%9C%E7%B4%A2/%E9%83%A8%E5%88%86%E5%92%8C%E9%97%AE%E9%A2%98/</guid>
+      <description>题目描述 给定n(n&amp;lt;20)个数，判断是否可以从中选出若干个数，使他们的和为k。
+解题思路  用dfs枚举可能的组合  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; const int MAXN = 30; int n;//n个数 int k; int a[MAXN]; bool dfs(int x, int sum); int main() { scanf(&amp;#34;%d&amp;#34;, &amp;amp;n); int i; for (i = 0; i &amp;lt; n; ++i) { scanf(&amp;#34;%d&amp;#34;, &amp;amp;a[i]); } scanf(&amp;#34;%d&amp;#34;, &amp;amp;k); bool ans; ans = dfs(0, 0); if (ans) { printf(&amp;#34;Yes\n&amp;#34;); } else printf(&amp;#34;No\n&amp;#34;); return 0; } bool dfs(int x, int sum) { if (x == n) { if (sum == k) return true; return false; } //不加上a[x]  if (dfs(x + 1, sum)) return true; //加上a[x]  if (dfs(x + 1, sum + a[x])) return true; return false; } </description>
+    </item>
+    
+    <item>
+      <title>Random Walk</title>
+      <link>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/random-walk/</link>
+      <pubDate>Mon, 03 Feb 2020 19:06:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/random-walk/</guid>
+      <description>题目描述 有一个N*M大小的格子。从（0，0）出发，可以向四个方向等概率随机游走。另外有一些格子有石头，无法移动到这些格子。求第一次到达(N-1, M-1)格子的期望步数。假定一定存在这个路径。
+解题思路  如果四个方向都能移动： E(x,y)=(E(x-1,y)+E(x+1,y)+E(x,y+1)+E(x,y-1))/4+1 即有： 4E(x,y)-E(x-1,y)-E(x+1,y)-E(x,y+1)-E(x,y-1)=4 如果有的方向是石子，就把上式稍作改变即可，要保证是等概率的。 可以把上式看成是一个方程，如果格子上的每个点都列一个方程，就能组成一个N*M的方程组，解出方程组就能求出答案。对于是石子的格子，E(x,y)=0。对于(x,y)=(N-1,M-1)，E(x,y)=0。  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; const double EPS = 1e-8; const int MAXN = 220; double A[MAXN][MAXN], b[MAXN]; double X[MAXN]; int n, m; bool canGoal[20][20]; char maze[20][20]; int equ, var;//方程数和未知数个数 int go[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} }; int gauss(); void dfs(int x, int y); int main() { scanf(&amp;#34;%d%d&amp;#34;, &amp;amp;n, &amp;amp;m); int i, j;int x, y; int move; for (i = 0; i &amp;lt; n; ++i) { scanf(&amp;#34;%s&amp;#34;, maze[i]); } dfs(n - 1, m - 1); //生成方程组  equ = var = n * m; for (x = 0; x &amp;lt; n; ++x) { for (y = 0; y &amp;lt; m; ++y) { //如果是终点，或者是不能到终点的点  if ((x == n - 1 &amp;amp;&amp;amp; y == m - 1) || !</description>
+    </item>
+    
+    <item>
+      <title>素数判定</title>
+      <link>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/</link>
+      <pubDate>Mon, 03 Feb 2020 19:06:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/</guid>
+      <description>题目描述 给定数n，判断n是否为素数；求n的约数；求n的整数分解形式
+解题思路  枚举n可能的约数  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;stack&amp;gt;#include&amp;lt;cmath&amp;gt;#include&amp;lt;map&amp;gt;using namespace std; /* 素数测试判断素数 */ bool isPrime1(int n) { if(n == 1) return false; int k = sqrt(n); for (int i = 2; i &amp;lt;= k; ++i){ if(n % i == 0) return false; } return true; } /* 约数枚举 */ vector&amp;lt;int&amp;gt; divisor(int n) { vector&amp;lt;int&amp;gt; res; int k = sqrt(n); for(int i = 1; i &amp;lt;= k; ++i){ if(n % i == 0){ res.</description>
+    </item>
+    
+    <item>
+      <title>线段上的格点数</title>
+      <link>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</link>
+      <pubDate>Sun, 02 Feb 2020 19:04:01 +0800</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/%E6%95%B0%E8%AE%BA/%E7%BA%BF%E6%AE%B5%E4%B8%8A%E7%9A%84%E6%A0%BC%E7%82%B9%E6%95%B0/%E9%AB%98%E6%96%AF%E6%B6%88%E5%85%83/</guid>
+      <description>题目描述 给定平面上的两个格点P和Q的坐标。求线段PQ除端点以外一共有多少个格点？
+解题思路  答案是线段x轴投影长度与y轴投影长度的最大公约数-1 注意特判P与Q重合的情况  代码 #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;stack&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std; /*辗转相除法，求a和b的最大公约数*/ int gcd(int a, int b) { if(b == 0) return a; return gcd(b, a % b); } int main() { int x1, y1, x2, y2; scanf(&amp;#34;%d%d%d%d&amp;#34;, &amp;amp;x1, &amp;amp;y1, &amp;amp;x2, &amp;amp;y2); int dx = abs(x1 - x2); int dy = abs(y1 - y2); int ans; if(!dx &amp;amp;&amp;amp; !dy){ //特判dx==0&amp;amp;&amp;amp;dy==0的情况  ans = 0; } else{ ans = gcd(dx, dy) - 1; } printf(&amp;#34;%d\n&amp;#34;, ans); } </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://zhujiaqi9905.github.io/tree/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zhujiaqi9905.github.io/tree/</guid>
+      <description>#include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;algorithm&amp;gt;#include&amp;lt;vector&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;string&amp;gt;#include&amp;lt;cmath&amp;gt;using namespace std;const int MAXN = 10010;struct Edge {int to, length;Edge(int t, int l) {to = t;length = l;}Edge(){}};int N, K;//N个顶点，距离是Kvector&amp;lt;Edge&amp;gt; G[MAXN];bool centroid[MAXN];//顶点是否已经作为重心删除的标记int subtreeSize[MAXN];//以该节点为根的子树大小（查找重心时用）int ans;int main(){while (scanf(&amp;#34;%d%d&amp;#34;, &amp;amp;N, &amp;amp;K)) { if (N == 0 &amp;amp;&amp;amp; K == 0) break;for (int i = 0; i &amp;lt; MAXN; ++i) {G[i].</description>
     </item>
     
   </channel>
